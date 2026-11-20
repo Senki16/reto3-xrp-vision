@@ -1,0 +1,6 @@
+# En la Raspberry Pi (Raspberry Pi OS Bookworm):
+#   sudo apt install -y python3-picamera2 python3-opencv python3-numpy python3-serial
+# o con pip (picamera2 conviene instalarlo con apt):
+opencv-python
+numpy
+pyserial

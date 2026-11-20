@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reto 3 · Visión artificial XRP</title>
+  <meta name="description" content="Robot XRP que sigue una línea y esquiva obstáculos rojos usando solo la cámara de una Raspberry Pi. Simulador 3D con la visión artificial en vivo. Actuadores y Sensores, EAFIT 2026-2.">
+  <meta property="og:title" content="Reto 3 · Seguimiento de línea y evasión con visión artificial">
+  <meta property="og:description" content="Simulador 3D en el navegador: la cámara del robot alimenta el mismo algoritmo de visión y control que corre en la Raspberry Pi.">
+  <meta property="og:image" content="assets/og.png">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    { "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="#inicio"><span class="marca-cod">R3</span> Visión artificial · XRP</a>
+    <nav>
+      <a href="#simulador">Simulador 3D</a>
+      <a href="#arquitectura">Arquitectura</a>
+      <a href="#vision">Visión</a>
+      <a href="#control">Control</a>
+      <a href="#evaluacion">Evaluación</a>
+      <a href="#codigo">Código</a>
+    </nav>
+    <a class="boton-gh" id="enlace-gh" href="https://github.com/Senki16/reto3-xrp-vision" target="_blank" rel="noopener">GitHub</a>
+  </header>
+
+  <!-- ============================== INICIO ============================== -->
+  <section id="inicio" class="heroe">
+    <div class="heroe-texto">
+      <p class="etiqueta">Actuadores y Sensores · Universidad EAFIT · 2026-2</p>
+      <h1>Seguimiento de línea y evasión de obstáculos <span class="acento">solo con visión</span></h1>
+      <p class="bajada">Un robot XRP recorre la pista y esquiva tres cilindros rojos usando únicamente la cámara de una Raspberry Pi.
+        La Pi procesa la imagen y decide. El XRP solo recibe por USB la potencia de cada rueda.</p>
+      <div class="heroe-botones">
+        <a class="boton primario" href="#simulador">Abrir el simulador 3D</a>
+        <a class="boton" href="#evaluacion">Ver la evaluación</a>
+      </div>
+      <p class="equipo">David Zuluaga Henao · Lucas Arango Botero · Nicolás Zapata Jurado — Prof. Felipe Mendoza Giraldo</p>
+    </div>
+    <figure class="heroe-figura">
+      <img src="assets/heroe.webp" alt="Render del robot XRP con Raspberry Pi y cámara sobre la pista con un cilindro rojo" loading="eager">
+    </figure>
+  </section>
+
+  <section class="kpis">
+    <div><b id="kpi-sin">6 / 6</b><span>vueltas sin obstáculos<br>(simulador Python)</span></div>
+    <div><b id="kpi-con">10 / 12</b><span>vueltas con 3 cilindros<br>(simulador Python)</span></div>
+    <div><b id="kpi-3d">—</b><span>vueltas en el entorno 3D<br>(esta página)</span></div>
+    <div><b>≤ 3,2 cm</b><span>desviación máxima a la línea<br>sin obstáculos</span></div>
+    <div><b>0</b><span>sensores del XRP usados<br>(solo la cámara)</span></div>
+  </section>
+
+  <!-- ============================== SIMULADOR ============================== -->
+  <section id="simulador" class="sim">
+    <div class="sim-cab">
+      <div>
+        <p class="etiqueta">Entorno 3D en el navegador</p>
+        <h2>Simulador: tercera y primera persona</h2>
+        <p class="nota">La cámara virtual del robot tiene la misma óptica y montaje que la real (62,2° de campo, 17 cm de altura, 52° hacia abajo, 320×240).
+          Cada imagen que renderiza pasa por <b>el mismo algoritmo de visión y control</b> del robot (portado de Python a JavaScript y verificado contra él).
+          Nada del simulador le "dice" al robot dónde está la línea o el cilindro: solo ve píxeles.</p>
+      </div>
+    </div>
+
+    <div class="sim-grid">
+      <div class="vista3d">
+        <canvas id="lienzo3d"></canvas>
+        <div class="hud">
+          <span class="chip" id="hud-estado">ESPERA</span>
+          <span class="hud-dato">t <b id="hud-t">0.0</b> s</span>
+          <span class="hud-dato">avance <b id="hud-av">0</b> / <b id="hud-L">811</b> cm</span>
+          <span class="hud-dato">esquivados <b id="hud-ev">0</b></span>
+        </div>
+        <div class="progreso"><div id="hud-barra"></div></div>
+        <div class="camaras" role="group" aria-label="Cámara de la vista 3D">
+          <button data-cam="persecucion" class="activo">Persecución</button>
+          <button data-cam="lateral">Lateral</button>
+          <button data-cam="orbita">Órbita libre</button>
+          <button data-cam="superior">Superior</button>
+        </div>
+        <div class="aviso-final" id="aviso-final" hidden></div>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-cab">
+          <h3>Cámara del robot <span class="sub">primera persona · visión artificial</span></h3>
+          <div class="pestanas" role="tablist">
+            <button data-modo="deteccion" class="activo">Detección</button>
+            <button data-modo="cruda">Imagen</button>
+            <button data-modo="linea">Máscara línea</button>
+            <button data-modo="rojo">Máscara rojo</button>
+          </div>
+        </div>
+        <canvas id="lienzo-cam" width="640" height="480"></canvas>
+        <div class="fila-dos">
+          <div>
+            <h4>Vista de pájaro <span class="sub">marco del robot, cm</span></h4>
+            <canvas id="lienzo-pajaro" width="300" height="300"></canvas>
+          </div>
+          <div class="telemetria">
+            <h4>Telemetría</h4>
+            <dl>
+              <dt>Estado</dt><dd id="t-estado">—</dd>
+              <dt>Motivo</dt><dd id="t-motivo">—</dd>
+              <dt>u izq / der</dt><dd id="t-u">—</dd>
+              <dt>Línea</dt><dd id="t-linea">—</dd>
+              <dt>Cilindro</dt><dd id="t-obst">—</dd>
+              <dt>Desviación</dt><dd id="t-desv">—</dd>
+              <dt>Visión</dt><dd id="t-ms">—</dd>
+            </dl>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="controles">
+      <div class="grupo">
+        <button class="boton primario" id="b-iniciar">Iniciar</button>
+        <button class="boton" id="b-reiniciar">Reiniciar</button>
+        <button class="boton" id="b-paso" title="Avanza una imagen">Paso</button>
+      </div>
+      <label>Semilla <input type="number" id="c-semilla" value="100" min="1" max="9999"></label>
+      <label>Sentido
+        <select id="c-sentido"><option value="antihorario">Antihorario</option><option value="horario">Horario</option></select>
+      </label>
+      <label>Cilindros
+        <select id="c-cil"><option value="azar">3 al azar (semilla)</option><option value="0,3,5">Posiciones 0, 3, 5</option><option value="1,2,6">Posiciones 1, 2, 6</option><option value="2,4,6">Posiciones 2, 4, 6</option><option value="">Sin cilindros</option></select>
+      </label>
+      <label>Iluminación
+        <select id="c-luz"><option value="salon">Salón</option><option value="calida">Cálida</option><option value="tenue">Tenue</option><option value="ventana">Sol de ventana</option></select>
+      </label>
+      <label>Velocidad
+        <select id="c-vel"><option value="1">×1 (tiempo real)</option><option value="2">×2</option><option value="4" selected>×4</option><option value="16">×16</option></select>
+      </label>
+      <label class="check"><input type="checkbox" id="c-ruido" checked> Ruido del sensor</label>
+    </div>
+
+    <details class="bitacora">
+      <summary>Bitácora de estados</summary>
+      <ol id="bitacora"></ol>
+    </details>
+  </section>
+
+  <!-- ============================== ARQUITECTURA ============================== -->
+  <section id="arquitectura" class="doc">
+    <p class="etiqueta">1 · Arquitectura</p>
+    <h2>Cámara → Raspberry Pi → serial USB → XRP → motores</h2>
+    <div class="explosionado">
+      <img src="assets/sistema.webp" alt="Vista explosionada del robot: cámara, Raspberry Pi, portapilas, cable USB y XRP" loading="lazy">
+      <ol class="leyenda">
+        <li><b>Cámara</b> Pi Camera en mástil: 17 cm de altura, 7 cm delante del eje, 52° hacia abajo, 62,2° de campo.</li>
+        <li><b>Raspberry Pi 4</b> visión + decisión en Python/OpenCV, ~30 imágenes por segundo.</li>
+        <li><b>Portapilas 18650</b> alimentación propia de la Pi.</li>
+        <li><b>Cable USB</b> enlace serial (<span class="mono">/dev/ttyACM0</span>, 115200) y tierra común.</li>
+        <li><b>XRP</b> controladora, motores y chasis: solo ejecuta la potencia de cada rueda.</li>
+      </ol>
+    </div>
+    <div class="dos-col">
+      <div>
+        <svg class="diagrama" viewBox="0 0 620 170" role="img" aria-label="Diagrama de bloques">
+          <defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+          <g class="bloque"><rect x="4" y="50" width="110" height="64" rx="6"/><text x="59" y="80">Cámara</text><text x="59" y="98" class="peq">Pi Camera 320×240</text></g>
+          <g class="bloque destacado"><rect x="160" y="40" width="150" height="84" rx="6"/><text x="235" y="72">Raspberry Pi</text><text x="235" y="90" class="peq">visión + decisión</text><text x="235" y="106" class="peq">~30 imágenes/s</text></g>
+          <g class="bloque"><rect x="356" y="50" width="120" height="64" rx="6"/><text x="416" y="80">XRP</text><text x="416" y="98" class="peq">main.py</text></g>
+          <g class="bloque"><rect x="516" y="50" width="100" height="64" rx="6"/><text x="566" y="80">Motores</text><text x="566" y="98" class="peq">izq. / der.</text></g>
+          <g class="flecha"><line x1="114" y1="82" x2="158" y2="82" marker-end="url(#fl)"/><text x="136" y="72" class="peq">imagen</text>
+            <line x1="310" y1="82" x2="354" y2="82" marker-end="url(#fl)"/><text x="332" y="72" class="peq">USB</text><text x="332" y="104" class="peq mono">"0.4,0.4\n"</text>
+            <line x1="476" y1="82" x2="514" y2="82" marker-end="url(#fl)"/><text x="495" y="72" class="peq">PWM</text></g>
+        </svg>
+        <p>El XRP no usa reflectancia, distancia ni IMU: solo convierte el comando de cada rueda en esfuerzo del motor.
+          Si deja de recibir comandos por 0,5 s, se detiene.</p>
+      </div>
+      <div>
+        <h3>Protocolo serial</h3>
+        <table class="tabla">
+          <thead><tr><th>Mensaje</th><th>Significado</th><th>Respuesta</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">0.5,0.5</td><td>potencia normalizada izq./der. (−1 a 1; 1 = 18 cm/s)</td><td class="mono">OK</td></tr>
+            <tr><td class="mono">E:0.4,0.4</td><td>esfuerzo crudo (calibración)</td><td class="mono">OK</td></tr>
+            <tr><td class="mono">S</td><td>detener</td><td class="mono">OK</td></tr>
+            <tr><td class="mono">P</td><td>ping</td><td class="mono">PONG</td></tr>
+            <tr><td class="mono">BTN</td><td>XRP → Pi: botón presionado (salida)</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <p class="nota">El XRP linealiza cada motor con lo medido en el Reto 1: <span class="mono">esfuerzo = KS + KV·v</span>.
+          Así 0,5 es la misma velocidad en ambas ruedas aunque un motor sea más fuerte.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== VISION ============================== -->
+  <section id="vision" class="doc alterna">
+    <p class="etiqueta">2 · Visión artificial</p>
+    <h2>De píxeles a centímetros sobre el piso</h2>
+    <p class="intro">Estas son las etapas de la imagen que está viendo ahora el robot del simulador (se actualizan en vivo).</p>
+    <div class="etapas">
+      <figure><canvas id="e-cruda" width="320" height="240"></canvas><figcaption><b>1. Imagen</b> 320×240 de la cámara (con ruido de sensor).</figcaption></figure>
+      <figure><canvas id="e-gris" width="320" height="240"></canvas><figcaption><b>2. Grises + Gauss 5×5.</b> Umbral relativo al brillo del piso: <span id="e-umbral" class="mono">—</span>.</figcaption></figure>
+      <figure><canvas id="e-tablero" width="320" height="240"></canvas><figcaption><b>3. Zona del tablero:</b> envolvente convexa de lo claro. Lo oscuro fuera del tablero (piso del salón, juntas) se descarta.</figcaption></figure>
+      <figure><canvas id="e-linea" width="320" height="240"></canvas><figcaption><b>4. Máscara de la línea</b> (sin el rojo, apertura 3×3) y componentes conectados.</figcaption></figure>
+      <figure><canvas id="e-rojo" width="320" height="240"></canvas><figcaption><b>5. Rojo en HSV</b> (H ≤ 10 o ≥ 165, S ≥ 90, V ≥ 50) + apertura/cierre. La base del cilindro → distancia.</figcaption></figure>
+      <figure><canvas id="e-pajaro" width="320" height="240"></canvas><figcaption><b>6. Anillos en cm:</b> cada píxel se proyecta al piso y el trazo se muestrea cada 1,5 cm desde las ruedas.</figcaption></figure>
+    </div>
+    <div class="dos-col">
+      <div>
+        <h3>Por qué en centímetros</h3>
+        <p>Con la altura, inclinación y campo de visión de la cámara (modelo estenopeico, sección 5 del cuaderno) cada píxel del piso tiene
+          una posición (X, Y) en cm respecto al eje de las ruedas. Así el control razona en el mundo real: una esquina de 90° o un tramo
+          que cruza la imagen se siguen igual que una recta, y la distancia al cilindro sale en cm.</p>
+      </div>
+      <div>
+        <h3>Filtros contra falsos positivos</h3>
+        <ul>
+          <li>Grosor medio del trazo = área/largo en el piso: la cinta mide ~2 cm; las juntas de baldosa y el piso del salón no.</li>
+          <li>La línea nueva debe conectar con el camino que el robot ya conoce (hay tramos de pista a ~9 cm uno de otro).</li>
+          <li>El rojo se descuenta de la máscara de la línea (en grises también es oscuro).</li>
+          <li>La transversal de salida/meta se reconoce porque sobresale a ambos lados de la línea.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== CONTROL ============================== -->
+  <section id="control" class="doc">
+    <p class="etiqueta">3 · Control</p>
+    <h2>Máquina de estados</h2>
+    <svg class="diagrama estados" viewBox="0 0 900 230" role="img" aria-label="Máquina de estados">
+      <defs><marker id="fl2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <g class="estado" data-e="SEGUIR"><rect x="20" y="30" width="130" height="50" rx="25"/><text x="85" y="60">SEGUIR</text></g>
+      <g class="estado" data-e="BUSCAR"><rect x="20" y="150" width="130" height="50" rx="25"/><text x="85" y="180">BUSCAR</text></g>
+      <g class="estado" data-e="FRENO"><rect x="230" y="30" width="130" height="50" rx="25"/><text x="295" y="60">FRENO</text></g>
+      <g class="estado" data-e="RETROCEDER"><rect x="230" y="150" width="130" height="50" rx="25"/><text x="295" y="180">RETROCEDER</text></g>
+      <g class="estado" data-e="EVADIR"><rect x="440" y="90" width="130" height="50" rx="25"/><text x="505" y="120">EVADIR</text></g>
+      <g class="estado" data-e="META"><rect x="650" y="30" width="110" height="50" rx="25"/><text x="705" y="60">META</text></g>
+      <g class="estado" data-e="FIN"><rect x="790" y="30" width="90" height="50" rx="25"/><text x="835" y="60">FIN</text></g>
+      <g class="flecha">
+        <path d="M70,80 L70,148" marker-end="url(#fl2)"/><text x="16" y="118" class="peq">línea perdida</text>
+        <path d="M100,150 L100,82" marker-end="url(#fl2)"/><text x="106" y="118" class="peq">encontrada</text>
+        <path d="M150,55 L228,55" marker-end="url(#fl2)"/><text x="189" y="46" class="peq">cilindro ≤ 30 cm</text>
+        <path d="M295,80 L295,148" marker-end="url(#fl2)"/><text x="301" y="118" class="peq">&lt; 20 cm</text>
+        <path d="M360,62 L440,105" marker-end="url(#fl2)"/>
+        <path d="M360,170 L440,128" marker-end="url(#fl2)"/>
+        <path d="M505,90 C505,10 150,10 120,30" marker-end="url(#fl2)"/><text x="300" y="16" class="peq">ve la línea al otro lado</text>
+        <path d="M150,62 C400,62 600,40 648,55" marker-end="url(#fl2)" class="tenue"/><text x="560" y="34" class="peq">transversal (3 esquivados)</text>
+        <path d="M760,55 L788,55" marker-end="url(#fl2)"/>
+      </g>
+    </svg>
+    <div class="tres-col">
+      <article class="tarjeta">
+        <h3>Persecución pura + memoria</h3>
+        <p>Se apunta al punto del camino a 8 cm y se calcula la curvatura del arco que llega a él: <span class="mono">κ = 2·Y/(X²+Y²)</span>.
+          La cámara no ve los ~12 cm delante de las ruedas: los puntos que salen de la vista se guardan y se desplazan con el movimiento
+          estimado del comando enviado. Así el robot gira en las esquinas de radio 6–9 cm justo donde debe.</p>
+      </article>
+      <article class="tarjeta">
+        <h3>Evasión geométrica</h3>
+        <p>Al frenar se re-mide el cilindro y se busca la línea que sale del otro lado. La ruta es un tramo tangente a un círculo de seguridad
+          (medio ancho + radio + 8 cm = 20 cm), un arco alrededor del cilindro y la salida sobre la línea, recalculada en cada imagen.
+          En curva se pasa por el interior; en recta, por el lado donde se ve más tablero.</p>
+      </article>
+      <article class="tarjeta">
+        <h3>Reingreso seguro</h3>
+        <p>Solo se vuelve a seguir una línea que sale desde cerca del cilindro, se aleja de él y no apunta hacia atrás. Mientras busca,
+          el robot nunca acepta la línea en sentido contrario (no se da la vuelta) ni un tramo vecino de la pista.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================== EVALUACION ============================== -->
+  <section id="evaluacion" class="doc alterna">
+    <p class="etiqueta">4 · Evaluación</p>
+    <h2>Resultados</h2>
+    <div class="dos-col">
+      <div>
+        <h3>Entorno 3D (esta página)</h3>
+        <p>Vueltas completas en el simulador 3D: renderizado con luces y sombras, cilindros con manija, piso de baldosas, ruido de sensor,
+          diferencia entre motores y latencia de una imagen. Se cuenta como completa si llega a la meta sin tocar ningún cilindro y sin salirse del tablero.</p>
+        <table class="tabla" id="tabla-3d">
+          <thead><tr><th>#</th><th>Semilla</th><th>Sentido</th><th>Cilindros</th><th>Tiempo</th><th>Esquivados</th><th>Desv. máx.</th><th>Resultado</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="grupo">
+          <button class="boton primario" id="b-evaluar">Evaluar 6 vueltas aquí</button>
+          <span class="nota" id="eval-estado"></span>
+        </div>
+      </div>
+      <div>
+        <h3>Simulador Python (cámara por trazado de rayos)</h3>
+        <table class="tabla">
+          <thead><tr><th>Prueba</th><th>Completas</th><th>Detalle</th></tr></thead>
+          <tbody>
+            <tr><td>Sin obstáculos, ambos sentidos</td><td><b>6 / 6</b></td><td>desviación máx. 2,0–3,2 cm, ~165 s por vuelta</td></tr>
+            <tr><td>3 cilindros al azar, ambos sentidos</td><td><b>10 / 12</b></td><td>las 10 completas sin tocar cilindros, ~180 s</td></tr>
+          </tbody>
+        </table>
+        <h3>Limitaciones</h3>
+        <ul>
+          <li>Un cilindro a menos de ~15 cm después de una esquina de radio ~8 cm queda en la zona que barre el robot al girar; con 62° de campo no se ve antes.</li>
+          <li>Con un cilindro justo antes de una esquina, el robot puede retomar la línea más adelante (atajo). Se puede fijar el lado con <span class="mono">EVASION_LADOS</span>.</li>
+          <li>La memoria y la ruta usan el movimiento estimado del comando: hay que calibrar <span class="mono">V_MAX_CM_S</span> y los motores.</li>
+          <li>Todo está validado en simulación; falta la prueba en el robot real.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== CODIGO ============================== -->
+  <section id="codigo" class="doc">
+    <p class="etiqueta">5 · Código</p>
+    <h2>Repositorio</h2>
+    <div class="dos-col">
+      <div>
+        <table class="tabla">
+          <thead><tr><th>Carpeta</th><th>Contenido</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">xrp/main.py</td><td>Programa del XRP (MicroPython): comandos por serial, compensación de motores.</td></tr>
+            <tr><td class="mono">raspberry/</td><td>Programa de la Pi: visión, geometría, control, serial, cámara, video en el navegador, herramientas de calibración.</td></tr>
+            <tr><td class="mono">simulador/</td><td>Simulador Python (cámara por trazado de rayos) y pruebas por lotes.</td></tr>
+            <tr><td class="mono">web/</td><td>Esta página y el simulador 3D (visión y control portados a JavaScript).</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <pre class="codigo"><code># en la Raspberry Pi
+python3 prueba_serial.py          # enlace y calibración de motores
+python3 reto3.py --stream         # http://&lt;ip-de-la-pi&gt;:8080
+
+# en el computador
+cd simulador
+python sim.py --semilla 100 --video
+python correr_lote.py 12</code></pre>
+        <a class="boton primario" id="enlace-gh2" href="https://github.com/Senki16/reto3-xrp-vision" target="_blank" rel="noopener">Ver el código en GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <p>Reto 3 · Actuadores y Sensores · Universidad EAFIT · 2026-2 · David Zuluaga Henao, Lucas Arango Botero, Nicolás Zapata Jurado</p>
+    <p class="nota">Simulador 3D con <a href="https://threejs.org" target="_blank" rel="noopener">Three.js</a>. Pista del Reto 1 a escala (99,4 × 198,5 cm).</p>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

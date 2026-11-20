@@ -1,0 +1,11 @@
+# guia del curso (material del profesor)
+*.pdf
+# salidas generadas
+simulador/salidas/
+raspberry/registros/
+raspberry/capturas/
+raspberry/config_local.json
+__pycache__/
+*.pyc
+.claude/
+.vercel/
