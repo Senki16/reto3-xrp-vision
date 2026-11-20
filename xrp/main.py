@@ -30,6 +30,14 @@ import sys
 import select
 import time
 
+try:
+    import machine
+    _CAUSAS = {getattr(machine, k, -1): k for k in ("PWRON_RESET", "HARD_RESET", "WDT_RESET",
+                                                      "DEEPSLEEP_RESET", "SOFT_RESET")}
+    CAUSA_INICIO = _CAUSAS.get(machine.reset_cause(), str(machine.reset_cause()))
+except Exception:
+    CAUSA_INICIO = "?"
+
 TIMEOUT_MS = 500
 LINEALIZAR = True
 V_MAX_CM_S = 18.0      # velocidad que corresponde a u = 1 (alcanzable por ambos motores)
@@ -41,6 +49,10 @@ ZONA_MUERTA = 0.02     # |u| menor que esto = detenido
 ESFUERZO_MAX = 1.0
 INVERTIR_IZQ = False   # por si un motor quedo conectado al reves
 INVERTIR_DER = False
+# Arranque suave: el esfuerzo de cada motor cambia como maximo RAMPA por segundo.
+# Un arranque de golpe pide un pico de corriente que puede reiniciar el XRP o
+# apagar el puerto USB de la Raspberry Pi (se corta la comunicacion serial).
+RAMPA = 3.0            # 0 -> 0.6 en 0.2 s
 
 
 def a_esfuerzo(u, ks, kv):
@@ -58,12 +70,46 @@ def a_esfuerzo(u, ks, kv):
     return e if u > 0 else -e
 
 
+objetivo = [0.0, 0.0]   # esfuerzo pedido
+actual = [0.0, 0.0]     # esfuerzo aplicado (sigue al pedido con la rampa)
+
+
 def aplicar(ei, ed):
     if INVERTIR_IZQ:
         ei = -ei
     if INVERTIR_DER:
         ed = -ed
-    drivetrain.set_effort(ei, ed)
+    objetivo[0], objetivo[1] = ei, ed
+
+
+def detener_ya():
+    objetivo[0] = objetivo[1] = actual[0] = actual[1] = 0.0
+    drivetrain.stop()
+
+
+def rampa(dt_ms):
+    """Acerca el esfuerzo aplicado al pedido sin saltos bruscos."""
+    paso = RAMPA * dt_ms / 1000.0
+    cambio = False
+    for i in (0, 1):
+        d = objetivo[i] - actual[i]
+        if d > paso:
+            d = paso
+        elif d < -paso:
+            d = -paso
+        if d:
+            actual[i] += d
+            cambio = True
+    if cambio:
+        drivetrain.set_effort(actual[0], actual[1])
+
+
+def motores_con_bateria():
+    """True/False si XRPLib puede medirlo; None si no se sabe."""
+    try:
+        return bool(board.are_motors_powered())
+    except Exception:
+        return None
 
 
 def led(encendido):
@@ -92,7 +138,7 @@ def procesar(linea):
         print("PONG")
         return True
     if c == "S":
-        drivetrain.stop()
+        detener_ya()
         print("OK")
         return False           # detenido: no cuenta como comando de movimiento
     crudo = False
@@ -122,6 +168,11 @@ led_estado = False
 
 buf = ""
 MAX_LINEA = 40         # una linea mas larga es basura (se descarta)
+t_rampa = time.ticks_ms()
+t_aviso = 0
+
+# al arrancar se avisa a la Pi: si aparece en medio de una vuelta, el XRP se reinicio
+print("INICIO causa=%s bateria=%s" % (CAUSA_INICIO, motores_con_bateria()))
 
 try:
     while True:
@@ -142,8 +193,16 @@ try:
 
         ahora = time.ticks_ms()
         if not detenido and time.ticks_diff(ahora, ultimo) > TIMEOUT_MS:
-            drivetrain.stop()
+            detener_ya()
             detenido = True
+        rampa(time.ticks_diff(ahora, t_rampa))
+        t_rampa = ahora
+
+        # sin bateria los motores no pueden moverse (o tumban el USB): avisar cada 2 s
+        if not detenido and (objetivo[0] or objetivo[1]) and time.ticks_diff(ahora, t_aviso) > 2000:
+            t_aviso = ahora
+            if motores_con_bateria() is False:
+                print("AVISO: motores sin bateria: encienda el XRP y revise las baterias")
 
         # boton = orden de salida para la Raspberry Pi
         b = boton()
@@ -163,5 +222,5 @@ try:
 
         time.sleep_ms(2)
 finally:
-    drivetrain.stop()
+    detener_ya()
     led(False)

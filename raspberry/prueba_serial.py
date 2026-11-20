@@ -40,7 +40,14 @@ def main():
                 print(txt, i, d)
                 mantener(xrp, i, d, 1.0)
                 time.sleep(0.5)
-            print("Respuestas OK recibidas:", xrp.oks, "| errores:", xrp.errores)
+            print("Respuestas OK recibidas:", xrp.oks, "| errores:", xrp.errores,
+                  "| reinicios del XRP:", xrp.reinicios)
+            if xrp.errores or xrp.reinicios:
+                print("-> La conexion se cae al mover los motores: falta corriente. Revise que el XRP\n"
+                      "   tenga baterias cargadas y el interruptor encendido, y que la Raspberry Pi\n"
+                      "   tenga una fuente/power bank de 5 V y 3 A o mas.")
+            else:
+                print("-> Comunicacion y motores OK")
         elif modo == "avance":
             input("Marque la posicion del robot y presione Enter...")
             mantener(xrp, 0.5, 0.5, 3.0)

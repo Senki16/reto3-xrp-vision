@@ -25,6 +25,7 @@ class XRP:
         self.boton = False          # se puso en True al llegar "BTN"
         self.errores = 0
         self.oks = 0
+        self.reinicios = 0
         self.ultimo_envio = (0.0, 0.0)
         self.puerto = "simulado"
         self._buf = ""
@@ -143,6 +144,16 @@ class XRP:
                 self.oks += 1
             elif linea == "BTN":
                 self.boton = True
+            elif linea.startswith("INICIO"):
+                # el XRP acaba de arrancar: si ya estaba respondiendo, se reinicio
+                # (casi siempre falta de corriente al arrancar los motores)
+                if self.oks:
+                    self.reinicios += 1
+                    print("XRP: SE REINICIO (%s). Revise baterias e interruptor del XRP." % linea)
+                else:
+                    print("XRP:", linea)
+            elif linea.startswith("AVISO"):
+                print("XRP:", linea)
             elif linea.startswith("ERROR"):
                 self.errores += 1
                 print("XRP:", linea)
