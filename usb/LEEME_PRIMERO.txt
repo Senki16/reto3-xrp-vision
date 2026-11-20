@@ -1,0 +1,71 @@
+RETO 3 - MEMORIA USB DEL ROBOT (arranque automatico en la Raspberry Pi)
+David Zuluaga Henao - Alejandro Nanclares - Nicolas Zapata Jurado
+
+Linux no ejecuta nada de una memoria USB por su cuenta (por seguridad). Por eso
+hay que hacer UNA instalacion en la Raspberry Pi; despues, cada vez que se
+conecte esta memoria, el robot arranca solo.
+
+==============================================================================
+1. UNA SOLA VEZ: instalar en la Raspberry Pi (necesita internet)
+==============================================================================
+  a) Conecte esta memoria a la Raspberry Pi y el XRP a la Pi por USB.
+     Cierre Thonny / XRPCode si estan abiertos (ocupan el puerto del XRP).
+  b) Abra una terminal (Ctrl+Alt+T) y escriba (o copie y pegue):
+
+        bash /media/$USER/VENTOY/RETO*/INSTALAR_EN_LA_PI.sh
+
+     (Tambien sirve: abrir la memoria en el explorador de archivos, doble clic
+      en INSTALAR_EN_LA_PI.sh y elegir "Ejecutar en terminal".)
+  c) Si al final dice "REINICIE la Pi", escriba:  sudo reboot
+
+==============================================================================
+2. CADA VEZ: conectar la memoria = arranca el robot
+==============================================================================
+  - Al conectar la memoria a la Pi (en unos 5 a 15 segundos):
+      1) se sube 1_XRP/main.py al XRP (solo si cambio) y el XRP se reinicia
+      2) arranca el programa del robot (2_RASPBERRY_PI/reto3/reto3.py)
+  - Ponga el robot sobre la linea, antes de la linea transversal de salida,
+    y presione el BOTON del XRP: sale 1 s despues.
+  - El robot se detiene solo en la meta (despues de 20 s y de esquivar los
+    3 cilindros). Para detenerlo antes: retire la memoria.
+  - Para repetir la vuelta: retire la memoria y vuelvala a conectar.
+
+  Que hace al conectarla se elige en RETO3_AUTOARRANQUE.txt (primera linea):
+      MODO=vuelta   (normal)     MODO=vision  (solo camara, no mueve motores)
+      MODO=prueba   (motores)    MODO=ya      (sale sin boton)    MODO=nada
+
+==============================================================================
+3. VER QUE PASO
+==============================================================================
+  - REGISTRO_ROBOT.txt (en esta carpeta): todo lo que hizo el programa,
+    con los errores si los hubo. Traiga la memoria al computador y revise.
+  - 2_RASPBERRY_PI/reto3/registros/: video de lo que vio la camara y CSV
+    de cada vuelta.
+  - Mientras corre: http://<ip-de-la-pi>:8080 en el navegador (misma red)
+    muestra la camara con la deteccion. La ip se ve con:  hostname -I
+
+==============================================================================
+4. AJUSTES SIN TOCAR EL CODIGO (desde el computador)
+==============================================================================
+  Edite 2_RASPBERRY_PI/reto3/config_local.json, por ejemplo con las medidas
+  reales de la camara:
+      CAM_ALTURA_CM     altura del lente sobre el piso (cm)
+      CAM_ADELANTE_CM   distancia del lente por delante del eje de las ruedas (cm)
+      CAM_INCLINACION   grados hacia abajo desde la horizontal
+  Si una rueda gira al reves: en 1_XRP/main.py ponga INVERTIR_IZQ o
+  INVERTIR_DER = True (se sube solo al XRP la proxima vez).
+
+==============================================================================
+SI NO ARRANCA
+==============================================================================
+  - Revise REGISTRO_ROBOT.txt.
+  - En la Pi:   systemctl --user status reto3-usb
+  - A mano:     cd /media/$USER/VENTOY/RETO*/2_RASPBERRY_PI/reto3
+                python3 reto3.py --grabar --stream
+  - Sin mpremote: suba 1_XRP/main.py al XRP con Thonny (guardar en el
+    dispositivo MicroPython con el nombre main.py).
+  - Quitar el arranque automatico: bash .../DESINSTALAR_DE_LA_PI.sh
+
+Otras carpetas: 3_SIMULADOR (solo computador), 4_INFORME (Word y PDF).
+Pagina: https://reto3-xrp-vision.vercel.app
+Codigo: https://github.com/Senki16/reto3-xrp-vision

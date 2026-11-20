@@ -1,0 +1,19 @@
+MODO=vuelta
+
+# =============================================================================
+#  Este archivo le dice a la Raspberry Pi que esta memoria es la del Reto 3.
+#  Cambie la primera linea (MODO=...) desde el computador para elegir que hacer
+#  al conectar la memoria:
+#
+#    MODO=vuelta   el programa del reto. Espera el BOTON del XRP para salir.
+#                  Graba video y registro en 2_RASPBERRY_PI/reto3/registros/
+#    MODO=ya       igual, pero sale solo 3 s despues de arrancar (sin boton).
+#                  Cuidado: el robot se mueve apenas se conecta la memoria.
+#    MODO=vision   solo camara y vision, NO mueve los motores (para calibrar).
+#                  Ver en http://<ip-de-la-pi>:8080
+#    MODO=prueba   prueba de comunicacion y motores (avanza, gira, retrocede).
+#    MODO=nada     no ejecuta nada (para copiar archivos sin mover el robot).
+#
+#  En todos los modos (menos "nada") primero se sube 1_XRP/main.py al XRP si cambio.
+#  Para detener: retire la memoria (o Ctrl+C si lo corre a mano).
+# =============================================================================
