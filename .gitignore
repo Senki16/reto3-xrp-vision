@@ -10,3 +10,4 @@ __pycache__/
 .claude/
 .vercel/
 ENTREGA_RETO3/
+!docs/*.pdf
