@@ -85,12 +85,36 @@ arrancar() {
             prueba) log "python3 prueba_serial.py"; python3 -u prueba_serial.py ;;
             vision) log "python3 reto3.py --sin-xrp --stream"; python3 -u reto3.py --sin-xrp --stream ;;
             ya)     log "python3 reto3.py --ya --grabar --stream"; python3 -u reto3.py --ya --grabar --stream ;;
-            *)      log "python3 reto3.py --grabar --stream  (presione el boton del XRP)"
-                    python3 -u reto3.py --grabar --stream ;;
+            *)      vueltas "$dir" ;;
         esac
         log "Programa terminado (codigo $?). Retire y vuelva a conectar la memoria para repetir."
     } >>"$dir/REGISTRO_ROBOT.txt" 2>&1
     sync
+}
+
+vueltas() {
+    # MODO=vuelta: al terminar una vuelta se vuelve a esperar el boton del XRP, asi
+    # se repite sin tocar la memoria ni el computador. Si el programa falla enseguida
+    # varias veces seguidas (camara o XRP desconectados), se deja de intentar.
+    local dir="$1" n=0 fallas=0 t0 cod
+    while [ -f "$dir/$MARCA" ]; do
+        n=$((n + 1))
+        log "Vuelta $n: python3 reto3.py --grabar --stream  (presione el boton del XRP)"
+        t0=$(date +%s)
+        python3 -u reto3.py --grabar --stream
+        cod=$?
+        sync
+        if [ $(( $(date +%s) - t0 )) -lt 10 ]; then
+            fallas=$((fallas + 1))
+            log "El programa termino enseguida (codigo $cod). Intento $fallas de 5."
+            [ "$fallas" -ge 5 ] && { log "Demasiadas fallas seguidas: revise camara y XRP."; return 1; }
+            sleep 5
+        else
+            fallas=0
+            log "Vuelta $n terminada (codigo $cod). Listo para otra: presione el boton del XRP."
+            sleep 2
+        fi
+    done
 }
 
 detener() {

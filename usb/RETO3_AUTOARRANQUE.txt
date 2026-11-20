@@ -5,7 +5,8 @@ MODO=vuelta
 #  Cambie la primera linea (MODO=...) desde el computador para elegir que hacer
 #  al conectar la memoria:
 #
-#    MODO=vuelta   el programa del reto. Espera el BOTON del XRP para salir.
+#    MODO=vuelta   el programa del reto. Espera el BOTON del XRP para salir y,
+#                  al terminar, vuelve a esperar el boton para otra vuelta.
 #                  Graba video y registro en 2_RASPBERRY_PI/reto3/registros/
 #    MODO=ya       igual, pero sale solo 3 s despues de arrancar (sin boton).
 #                  Cuidado: el robot se mueve apenas se conecta la memoria.

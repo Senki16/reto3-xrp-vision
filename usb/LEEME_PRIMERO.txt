@@ -28,7 +28,13 @@ conecte esta memoria, el robot arranca solo.
     y presione el BOTON del XRP: sale 1 s despues.
   - El robot se detiene solo en la meta (despues de 20 s y de esquivar los
     3 cilindros). Para detenerlo antes: retire la memoria.
-  - Para repetir la vuelta: retire la memoria y vuelvala a conectar.
+  - Al terminar una vuelta el programa queda esperando otra vez: ponga el
+    robot en la salida y presione el BOTON del XRP para repetir.
+
+  SIN COMPUTADOR: deje la memoria puesta en la Pi. Al encender el robot
+  (Pi con su bateria/power bank, XRP con sus baterias y conectado a la Pi por
+  USB) espere ~1 minuto a que la Pi arranque y presione el boton del XRP.
+  El computador y Guacamole no hacen falta; solo sirven para mirar.
 
   Que hace al conectarla se elige en RETO3_AUTOARRANQUE.txt (primera linea):
       MODO=vuelta   (normal)     MODO=vision  (solo camara, no mueve motores)
