@@ -227,15 +227,8 @@ class Controlador:
         SOBRE la linea: la direccion es la del ultimo punto de linea antes de el hacia su centro."""
         dist_o = math.hypot(o.X, o.Y)
         cerca = [p for p in (self.camino or lin.suelo)
-                 if cfg.OBST_RADIO_CM + 2 <= math.hypot(p[0] - o.X, p[1] - o.Y) <= 18
+                 if cfg.OBST_RADIO_CM + 3 <= math.hypot(p[0] - o.X, p[1] - o.Y) <= 15
                  and math.hypot(*p) < dist_o]
-        # con la linea misma (sin usar el centro estimado del cilindro, que puede tener
-        # varios cm de error si el cilindro sale cortado por el borde de la imagen)
-        if len(cerca) >= 3:
-            a, b = cerca[0], cerca[-1]
-            n = math.hypot(b[0] - a[0], b[1] - a[1])
-            if n >= 4:
-                return ((b[0] - a[0]) / n, (b[1] - a[1]) / n)
         if cerca:
             p = max(cerca, key=lambda q: math.hypot(*q))
             n = math.hypot(o.X - p[0], o.Y - p[1])

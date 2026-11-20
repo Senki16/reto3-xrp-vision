@@ -34,6 +34,7 @@ export class Simulador {
     this.linea = datos.linea;
     this.n = this.linea.length;
     this.rng = rngSemilla(semilla * 7919 + (sentido === 'horario' ? 1 : 0));
+    this.rngRuido = rngSemilla(semilla * 104729 + 17);
     let idx = cilindros;
     if (!idx) {
       const todos = [0, 1, 2, 3, 4, 5, 6];
@@ -87,7 +88,7 @@ export class Simulador {
     for (let y = 0; y < H; y++) {
       const src = (H - 1 - y) * W * 4, dst = y * W * 4;
       for (let x = 0; x < W * 4; x += 4) {
-        const n = this.ruido ? (Math.random() + Math.random() - 1) * 6 : 0;   // ruido del sensor
+        const n = this.ruido ? (this.rngRuido.u() + this.rngRuido.u() - 1) * 6 : 0;   // ruido del sensor (con semilla)
         o[dst + x] = b[src + x] + n; o[dst + x + 1] = b[src + x + 1] + n; o[dst + x + 2] = b[src + x + 2] + n; o[dst + x + 3] = 255;
       }
     }

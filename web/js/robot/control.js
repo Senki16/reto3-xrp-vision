@@ -136,13 +136,7 @@ export class Controlador {
   direccionLinea(lin, o) {
     const distO = Math.hypot(o.X, o.Y);
     const base = this.camino.length ? this.camino : lin.suelo;
-    const cerca = base.filter((p) => { const d = Math.hypot(p[0] - o.X, p[1] - o.Y); return d >= C.OBST_RADIO_CM + 2 && d <= 18 && hyp(p) < distO; });
-    // con la linea misma (sin usar el centro estimado del cilindro, que puede tener
-    // varios cm de error si el cilindro sale cortado por el borde de la imagen)
-    if (cerca.length >= 3) {
-      const a = cerca[0], b = cerca[cerca.length - 1], n = Math.hypot(b[0] - a[0], b[1] - a[1]);
-      if (n >= 4) return [(b[0] - a[0]) / n, (b[1] - a[1]) / n];
-    }
+    const cerca = base.filter((p) => { const d = Math.hypot(p[0] - o.X, p[1] - o.Y); return d >= C.OBST_RADIO_CM + 3 && d <= 15 && hyp(p) < distO; });
     if (cerca.length) {
       const p = cerca.reduce((a, b) => (hyp(b) > hyp(a) ? b : a));
       const n = Math.hypot(o.X - p[0], o.Y - p[1]);
