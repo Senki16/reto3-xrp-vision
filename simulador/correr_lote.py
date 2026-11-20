@@ -2,7 +2,7 @@
 import sys, os, json
 from concurrent.futures import ProcessPoolExecutor
 sys.path.insert(0, '.')
-sys.path.insert(0, '../raspberry')
+import _rutas  # noqa: F401
 
 
 def una(args):

@@ -22,7 +22,8 @@ import cv2
 import numpy as np
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(AQUI, "..", "raspberry"))
+sys.path.insert(0, AQUI)
+import _rutas  # noqa: E402,F401  (codigo de la Raspberry Pi)
 
 import config as cfg          # noqa: E402
 from piloto import Piloto, ESTADOS_EVASION  # noqa: E402

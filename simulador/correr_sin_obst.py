@@ -1,7 +1,7 @@
 # Prueba del seguidor sin obstaculos: python correr_sin_obst.py SEMILLA SENTIDO [PARAM=valor ...]
 import sys
 sys.path.insert(0, '.')
-sys.path.insert(0, '../raspberry')
+import _rutas  # noqa: F401
 import config as cfg
 for a in sys.argv[3:]:
     k, v = a.split('=')

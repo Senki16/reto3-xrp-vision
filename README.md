@@ -11,6 +11,10 @@ Cámara ──imagen──▶ Raspberry Pi (visión + decisión) ──"izq,der\
 ```
 
 🌐 **Sitio con el simulador 3D:** https://reto3-xrp-vision.vercel.app
+📄 **Informe:** [docs/Informe_Reto3_Actuadores_y_Sensores.pdf](docs/Informe_Reto3_Actuadores_y_Sensores.pdf)
+
+**Qué va en cada placa:** en el **XRP** solo [`xrp/main.py`](xrp/main.py) (guardado como `main.py` en su raíz);
+en la **Raspberry Pi** toda la carpeta [`raspberry/`](raspberry) (se ejecuta `python3 reto3.py`).
 
 ![Robot XRP con Raspberry Pi y cámara](web/assets/heroe.webp)
 
