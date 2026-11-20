@@ -72,6 +72,28 @@
       </div>
     </div>
 
+    <div class="controles">
+      <div class="grupo">
+        <button class="boton primario" id="b-iniciar">Iniciar</button>
+        <button class="boton" id="b-reiniciar">Reiniciar</button>
+        <button class="boton" id="b-paso" title="Avanza una imagen">Paso</button>
+      </div>
+      <label>Semilla <input type="number" id="c-semilla" value="100" min="1" max="9999"></label>
+      <label>Sentido
+        <select id="c-sentido"><option value="antihorario">Antihorario</option><option value="horario">Horario</option></select>
+      </label>
+      <label>Cilindros
+        <select id="c-cil"><option value="azar">3 al azar (semilla)</option><option value="0,3,5">Posiciones 0, 3, 5</option><option value="1,2,6">Posiciones 1, 2, 6</option><option value="2,4,6">Posiciones 2, 4, 6</option><option value="">Sin cilindros</option></select>
+      </label>
+      <label>Iluminación
+        <select id="c-luz"><option value="salon">Salón</option><option value="calida">Cálida</option><option value="tenue">Tenue</option><option value="ventana">Sol de ventana</option></select>
+      </label>
+      <label>Velocidad
+        <select id="c-vel"><option value="1">×1 (tiempo real)</option><option value="2">×2</option><option value="4" selected>×4</option><option value="16">×16</option></select>
+      </label>
+      <label class="check"><input type="checkbox" id="c-ruido" checked> Ruido del sensor</label>
+    </div>
+
     <div class="sim-grid">
       <div class="vista3d">
         <canvas id="lienzo3d"></canvas>
@@ -121,28 +143,6 @@
           </div>
         </div>
       </aside>
-    </div>
-
-    <div class="controles">
-      <div class="grupo">
-        <button class="boton primario" id="b-iniciar">Iniciar</button>
-        <button class="boton" id="b-reiniciar">Reiniciar</button>
-        <button class="boton" id="b-paso" title="Avanza una imagen">Paso</button>
-      </div>
-      <label>Semilla <input type="number" id="c-semilla" value="100" min="1" max="9999"></label>
-      <label>Sentido
-        <select id="c-sentido"><option value="antihorario">Antihorario</option><option value="horario">Horario</option></select>
-      </label>
-      <label>Cilindros
-        <select id="c-cil"><option value="azar">3 al azar (semilla)</option><option value="0,3,5">Posiciones 0, 3, 5</option><option value="1,2,6">Posiciones 1, 2, 6</option><option value="2,4,6">Posiciones 2, 4, 6</option><option value="">Sin cilindros</option></select>
-      </label>
-      <label>Iluminación
-        <select id="c-luz"><option value="salon">Salón</option><option value="calida">Cálida</option><option value="tenue">Tenue</option><option value="ventana">Sol de ventana</option></select>
-      </label>
-      <label>Velocidad
-        <select id="c-vel"><option value="1">×1 (tiempo real)</option><option value="2">×2</option><option value="4" selected>×4</option><option value="16">×16</option></select>
-      </label>
-      <label class="check"><input type="checkbox" id="c-ruido" checked> Ruido del sensor</label>
     </div>
 
     <details class="bitacora">
