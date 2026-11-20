@@ -10,7 +10,7 @@ La Pi procesa la imagen y decide; el XRP solo recibe por serial (USB) la potenci
 Cámara ──imagen──▶ Raspberry Pi (visión + decisión) ──"izq,der\n" por USB──▶ XRP ──▶ motores
 ```
 
-🌐 **Sitio con el simulador 3D:** URL_SITIO
+🌐 **Sitio con el simulador 3D:** https://reto3-xrp-vision.vercel.app
 
 ![Robot XRP con Raspberry Pi y cámara](web/assets/heroe.webp)
 
@@ -148,6 +148,7 @@ termina cuando el robot reconoce la meta y se detiene. Los cilindros se ponen en
 |---|---|---|
 | Sin obstáculos (6 semillas, ambos sentidos) | **6 / 6** | desviación máxima a la línea 2,0–3,2 cm (p95 ≈ 2 cm), ~165 s por vuelta |
 | Con 3 cilindros (12 semillas, ambos sentidos) | **10 / 12** | las 10 completas sin tocar ningún cilindro; ~180 s por vuelta |
+| **Entorno 3D** (web, Three.js), 3 cilindros, 6 semillas, ambos sentidos | **5 / 6** | render con luces y sombras, cilindros con manija, ruido de sensor; desviación media 1,5–2,0 cm; la vuelta que falla toca el cilindro a la salida de la curva en U |
 
 Los 2 casos que fallan son cilindros a pocos cm **antes** de una esquina cerrada: la línea dobla detrás del
 cilindro, donde la cámara no la ve al frenar, y al rodearlo el robot retoma un tramo vecino de la pista

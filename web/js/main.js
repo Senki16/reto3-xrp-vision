@@ -346,7 +346,7 @@ const ceder = () => new Promise((r) => { canal.port1.onmessage = () => r(); cana
 const tbody = $('#tabla-3d tbody');
 function filaResultado(k, semilla, sentido, r) {
   const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${k}</td><td>${semilla}</td><td>${sentido}</td><td class="mono">${r.cilindros.join(', ')}</td><td>${r.t.toFixed(0)} s</td><td>${r.evadidos}</td><td>${r.desvMax.toFixed(1)} cm</td>
+  tr.innerHTML = `<td>${k}</td><td>${semilla}</td><td>${sentido}</td><td class="mono">${r.cilindros.join(', ')}</td><td>${r.t.toFixed(0)} s</td><td>${r.evadidos}</td><td>${(r.desvMedia ?? 0).toFixed(1)} / ${r.desvMax.toFixed(1)} cm</td>
     <td class="${r.completa ? 'ok' : 'mal'}">${r.completa ? 'completa' : r.choque ? 'tocó cilindro' : r.salida ? 'salió' : 'incompleta'}</td>`;
   tbody.appendChild(tr);
 }

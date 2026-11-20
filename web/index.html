@@ -286,9 +286,12 @@
         <p>Vueltas completas en el simulador 3D: renderizado con luces y sombras, cilindros con manija, piso de baldosas, ruido de sensor,
           diferencia entre motores y latencia de una imagen. Se cuenta como completa si llega a la meta sin tocar ningún cilindro y sin salirse del tablero.</p>
         <table class="tabla" id="tabla-3d">
-          <thead><tr><th>#</th><th>Semilla</th><th>Sentido</th><th>Cilindros</th><th>Tiempo</th><th>Esquivados</th><th>Desv. máx.</th><th>Resultado</th></tr></thead>
+          <thead><tr><th>#</th><th>Semilla</th><th>Sentido</th><th>Cilindros</th><th>Tiempo</th><th>Esquivados</th><th>Desv. media / máx.</th><th>Resultado</th></tr></thead>
           <tbody></tbody>
         </table>
+        <p class="nota">La desviación se mide del eje de las ruedas a la línea fuera de la maniobra de evasión; la máxima corresponde al
+          regreso a la línea después de rodear un cilindro. En la vuelta 4 el robot tocó el segundo cilindro, que está en la salida de
+          la curva en U: lo detectó a ~21 cm y la dirección estimada de la línea en ese punto salió desviada.</p>
         <div class="grupo">
           <button class="boton primario" id="b-evaluar">Evaluar 6 vueltas aquí</button>
           <span class="nota" id="eval-estado"></span>
