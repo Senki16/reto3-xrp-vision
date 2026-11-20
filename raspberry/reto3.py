@@ -2,7 +2,7 @@
 # =============================================================================
 #  Reto 3 - Seguimiento de linea y evasion de obstaculos con vision
 #  Actuadores y Sensores - Universidad EAFIT 2026-2
-#  David Zuluaga Henao - Lucas Arango Botero - Nicolas Zapata Jurado
+#  David Zuluaga Henao - Alejandro Nanclares - Nicolas Zapata Jurado
 #
 #  Corre en la Raspberry Pi:  camara -> vision -> decision -> serial -> XRP
 #

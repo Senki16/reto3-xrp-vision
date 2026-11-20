@@ -1,7 +1,7 @@
 # Reto 3 · Seguimiento de línea y evasión de obstáculos con visión
 
 **Actuadores y Sensores — Universidad EAFIT, 2026-2** · Profesor: Felipe Mendoza Giraldo
-David Zuluaga Henao · Lucas Arango Botero · Nicolás Zapata Jurado
+David Zuluaga Henao · Alejandro Nanclares · Nicolás Zapata Jurado
 
 El robot XRP sigue la línea y esquiva los cilindros rojos usando **solo la cámara de la Raspberry Pi**.
 La Pi procesa la imagen y decide; el XRP solo recibe por serial (USB) la potencia de cada rueda.
