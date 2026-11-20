@@ -10,7 +10,7 @@ const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 
 await cargarConfig('data/config.json');
-const pista = await (await fetch('data/pista.json')).json();
+const pista = await (await fetch('data/pista.json', { cache: 'no-cache' })).json();
 
 // ------------------------------------------------------------------ escena
 const lienzo = $('#lienzo3d');
@@ -387,7 +387,7 @@ $('#b-evaluar').addEventListener('click', evaluar);
 
 // resultados ya medidos (si existen)
 try {
-  const r = await fetch('data/evaluacion3d.json');
+  const r = await fetch('data/evaluacion3d.json', { cache: 'no-cache' });
   if (r.ok) {
     const res = await r.json();
     res.forEach((x, k) => filaResultado(k + 1, x.semilla, x.sentido, x));

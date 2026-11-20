@@ -2,7 +2,7 @@
 export const C = {};
 
 export async function cargarConfig(url = 'data/config.json') {
-  const r = await fetch(url);
+  const r = await fetch(url, { cache: 'no-cache' });
   Object.assign(C, await r.json());
   return C;
 }
