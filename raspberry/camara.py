@@ -56,7 +56,11 @@ class Camara:
 
     def leer(self):
         if self.picam is not None:
-            img = self.picam.capture_array("main")      # "RGB888" de Picamera2 ya es orden BGR
+            try:
+                img = self.picam.capture_array("main")  # "RGB888" de Picamera2 ya es orden BGR
+            except Exception as e:
+                print("Camara:", e)
+                return None
             if img.shape[2] == 4:
                 img = img[:, :, :3]
         else:

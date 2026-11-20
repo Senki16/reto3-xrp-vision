@@ -69,11 +69,21 @@ def main():
         print("Listo. Presione el boton del XRP para arrancar (Ctrl+C para salir).")
     n, t_fps, fps = 0, t0, 0.0
     estado_ant = None
+    fallos_cam = 0
     try:
         while not detener["si"]:
             img = cam.leer()
             if img is None:
-                break
+                # fin del video de prueba, o la camara no entrego imagen: se
+                # reintenta (una imagen perdida no debe terminar la vuelta). No se
+                # envian comandos: si la falla dura mas de 0,5 s el XRP se frena solo.
+                fallos_cam += 1
+                if cam.archivo or fallos_cam > 30:
+                    print("Camara sin imagenes: se detiene el programa.")
+                    break
+                time.sleep(0.03)
+                continue
+            fallos_cam = 0
             t = time.monotonic()
 
             if piloto.estado == "ESPERA":

@@ -94,7 +94,7 @@ def procesar(linea):
     if c == "S":
         drivetrain.stop()
         print("OK")
-        return True
+        return False           # detenido: no cuenta como comando de movimiento
     crudo = False
     if c == "E":
         crudo = True
@@ -120,14 +120,25 @@ boton_antes = False
 parpadeo = time.ticks_ms()
 led_estado = False
 
+buf = ""
+MAX_LINEA = 40         # una linea mas larga es basura (se descarta)
+
 try:
     while True:
-        # leer TODOS los mensajes pendientes (se aplica cada uno; el ultimo manda)
+        # leer caracter por caracter lo que haya llegado, sin bloquear: con
+        # readline() una linea a medias (cable flojo, Pi reiniciada) dejaria el
+        # programa esperando el "\n" y el timeout de seguridad no correria.
         while poll.poll(0):
-            linea = sys.stdin.readline().strip()
-            if procesar(linea):
-                ultimo = time.ticks_ms()
-                detenido = False
+            ch = sys.stdin.read(1)
+            if ch == "\n" or ch == "\r":
+                if procesar(buf.strip()):
+                    ultimo = time.ticks_ms()
+                    detenido = False
+                buf = ""
+            elif len(buf) < MAX_LINEA:
+                buf += ch
+            else:
+                buf = ""
 
         ahora = time.ticks_ms()
         if not detenido and time.ticks_diff(ahora, ultimo) > TIMEOUT_MS:
