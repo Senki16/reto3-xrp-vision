@@ -36,7 +36,13 @@ def main():
     ap.add_argument("--sin-xrp", action="store_true", help="no abrir el serial (prueba de vision)")
     ap.add_argument("--puerto", default=cfg.SERIAL_PUERTO)
     ap.add_argument("--camara", default="pi", help="pi | usb | ruta a un video")
+    ap.add_argument("--vel", type=float, default=1.0,
+                    help="multiplica todas las velocidades (0.5 = la mitad, mas lento y seguro)")
     args = ap.parse_args()
+    if args.vel != 1.0:
+        for k in ("V_RECTA", "V_CURVA", "V_EVASION", "V_BUSCAR", "V_RETROCESO"):
+            setattr(cfg, k, getattr(cfg, k) * args.vel)
+        print("Velocidades x%.2f: recta %.2f, curva %.2f" % (args.vel, cfg.V_RECTA, cfg.V_CURVA))
 
     xrp = XRP(args.puerto, simulado=args.sin_xrp)
     if not args.sin_xrp:
