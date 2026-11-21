@@ -1,0 +1,39 @@
+CODIGO CON LA CAMARA BAJA (WEBCAM AL FRENTE) - PRUEBA REAL, CON ERRORES
+==============================================================================
+
+Que es esta carpeta
+  Es el mismo programa de la carpeta 1, con la configuracion de la camara con
+  la que se probo el robot en la pista (archivo 2_RASPBERRY_PI/reto3/config_local.json):
+      webcam USB Logitech al frente del chasis
+      CAM_ALTURA_CM = 4.5    CAM_ADELANTE_CM = 8    CAM_INCLINACION = 12
+      CAM_HFOV = 45          LINEA_ROI_SUP = 0.40
+  Se entrega para documentar lo que paso; NO es el montaje recomendado.
+
+Que funciono en la pista
+  - Comunicacion serial Pi-XRP: ping OK, 83 respuestas, 0 errores, 0 reinicios.
+  - Seguimiento de la linea en rectas y curvas suaves (ver 5_VIDEO).
+  - Salida desde la linea transversal con el boton del XRP.
+
+Errores y causas
+  1. En las esquinas cerradas el robot sigue derecho y se sale del tablero
+     (videos "falla"). CAUSA: la camara a 4,5 cm ve el piso casi rasante y solo
+     desde ~16 cm por delante del eje; la esquina sale de la imagen antes de
+     llegar a ella. Un grado de error en la inclinacion mueve la linea estimada
+     ~1,9 cm a 30 cm (0,8 cm con la camara alta).
+  2. Por lo anterior no se completo una vuelta sin intervencion ni se pudo
+     probar bien la evasion de los cilindros en la pista.
+  3. Con la misma geometria, en simulacion: 0/6 vueltas sin obstaculos y 0/12
+     con cilindros (Python), 0/6 en el entorno 3D. Con la camara alta: 6/6,
+     10/12 y 5/6.
+
+Problemas que aparecieron en la prueba y ya quedaron resueltos en el codigo
+  - El XRP tenia otro programa: se subio main.py con mpremote.
+  - Pilas bajas: el XRP se reiniciaba al arrancar los motores. main.py ahora
+    avisa "INICIO" al arrancar (la Pi muestra "SE REINICIO") y arranca los
+    motores con rampa. Solucion real: pilas nuevas.
+  - OpenCV en Debian 13: usar opencv-python-headless==4.10.0.84 (la 5.x falla).
+  - La webcam no acepta el control FrameRate de libcamera: camara.py ya lo omite.
+
+Conclusion
+  Para que el robot funcione de la mejor manera la camara debe ir ALTA
+  (12-17 cm) e inclinada hacia abajo (45-52 grados). Usar la carpeta 1.

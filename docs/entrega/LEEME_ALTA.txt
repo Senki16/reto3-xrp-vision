@@ -1,0 +1,33 @@
+CODIGO PARA LA CAMARA ALTA (MONTAJE RECOMENDADO) - FUNCIONA
+==============================================================================
+
+Montaje de la camara (es lo mas importante):
+  - Pi Camera (o la webcam) en un mastil o soporte rigido al frente del robot.
+  - Lente a unos 17 cm del piso, unos 7 cm por delante del eje de las ruedas.
+  - Inclinada unos 52 grados hacia abajo: debe ver el piso desde justo delante
+    del robot (~11 cm del eje) hasta unos 40 cm.
+  Si las medidas reales son distintas, NO cambie el codigo: mida y corra
+      python3 herramientas/auto_camara.py --altura <cm> --adelante <cm>
+  con el robot quieto sobre una recta de la linea (guarda config_local.json).
+
+Archivos:
+  1_XRP/main.py                 -> XRP (raiz, nombre main.py)
+  2_RASPBERRY_PI/reto3/         -> Raspberry Pi
+      reto3.py                  programa principal
+      config.py                 parametros (camara alta por defecto)
+      vision.py, geometria.py   vision artificial y proyeccion al piso
+      control.py, piloto.py     maquina de estados, seguimiento y evasion
+      camara.py, xrp_link.py    camara y enlace serial
+      prueba_serial.py          prueba de comunicacion y motores
+      herramientas/             calibracion de la camara
+
+Resultados con este montaje (simulador Python y 3D, mismo codigo):
+  - sin obstaculos: 6/6 vueltas completas (desviacion maxima 2,0-3,2 cm)
+  - con 3 cilindros: 10/12 (Python) y 5/6 (3D). Las fallas son con un cilindro
+    pegado a una esquina cerrada.
+
+Comandos en la Raspberry Pi:
+  python3 prueba_serial.py                      prueba de comunicacion
+  python3 reto3.py --sin-xrp --stream           ver la camara sin mover el robot
+                                                (http://<ip-de-la-pi>:8080)
+  python3 reto3.py --grabar --stream            la vuelta (boton del XRP para salir)
