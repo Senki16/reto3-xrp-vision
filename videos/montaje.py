@@ -59,6 +59,10 @@ GUION = [
      "El robot avanza por la recta inferior hasta el cilindro rojo, junto a la curva.  Video ×1,5"),
     ("video", "3.mp4", 0, 3.66, 1, "09 · RECORRIDO", "Por el centro de la pista",
      "Otra toma del robot siguiendo la línea en la zona de las curvas en S."),
+    ("video", "falla.mp4", 0, 9.6, 1.5, "10 · FALLAS", "Se sale del tablero",
+     "En una esquina cerrada pierde la línea: la esquina sale de la imagen de la cámara baja y el robot sigue derecho.  Video ×1,5"),
+    ("video", "falla2.mp4", 0, 8.0, 1.5, "10 · FALLAS", "Hay que reubicarlo",
+     "Después de salirse hay que volver a ponerlo sobre la línea a mano. Por esto la cámara debe ir alta.  Video ×1,5"),
     ("cierre",),
 ]
 
