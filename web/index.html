@@ -29,6 +29,7 @@
       <a href="#vision">Visión</a>
       <a href="#control">Control</a>
       <a href="#evaluacion">Evaluación</a>
+      <a href="#montaje">Prueba real</a>
       <a href="#codigo">Código</a>
     </nav>
     <a class="boton-gh" id="enlace-gh" href="https://github.com/Senki16/reto3-xrp-vision" target="_blank" rel="noopener">GitHub</a>
@@ -55,9 +56,9 @@
   <section class="kpis">
     <div><b id="kpi-sin">6 / 6</b><span>vueltas sin obstáculos<br>(simulador Python)</span></div>
     <div><b id="kpi-con">10 / 12</b><span>vueltas con 3 cilindros<br>(simulador Python)</span></div>
-    <div><b id="kpi-3d">—</b><span>vueltas en el entorno 3D<br>(esta página)</span></div>
+    <div><b id="kpi-3d">—</b><span>vueltas en 3D con la<br>cámara alta (esta página)</span></div>
+    <div><b id="kpi-3d-baja">—</b><span>vueltas en 3D con la<br>cámara baja (webcam)</span></div>
     <div><b>≤ 3,2 cm</b><span>desviación máxima a la línea<br>sin obstáculos</span></div>
-    <div><b>0</b><span>sensores del XRP usados<br>(solo la cámara)</span></div>
   </section>
 
   <!-- ============================== SIMULADOR ============================== -->
@@ -65,9 +66,11 @@
     <div class="sim-cab">
       <div>
         <p class="etiqueta">Entorno 3D en el navegador</p>
-        <h2>Simulador: tercera y primera persona</h2>
-        <p class="nota">La cámara virtual del robot tiene la misma óptica y montaje que la real (62,2° de campo, 17 cm de altura, 52° hacia abajo, 320×240).
-          Cada imagen que renderiza pasa por <b>el mismo algoritmo de visión y control</b> del robot (portado de Python a JavaScript y verificado contra él).
+        <h2><span class="montaje-dato" data-m="alta">Simulador 1 · cámara alta (diseño)</span><span class="montaje-dato" data-m="baja" hidden>Simulador 2 · cámara al frente (baja)</span></h2>
+        <p class="nota">Hay <b>dos simulaciones</b>, una por cada montaje de la cámara que se probó: arriba la cámara alta y debajo la cámara al frente.
+          <span class="montaje-dato" data-m="alta"><b>cámara alta</b>: Pi Camera en un mástil, 17 cm sobre el piso, 52° hacia abajo, 62,2° de campo (el diseño del reto).</span>
+          <span class="montaje-dato" data-m="baja" hidden><b>cámara baja</b>: webcam USB Logitech al frente del chasis, 4,5 cm sobre el piso, 12° hacia abajo, 45° de campo (como quedó el robot de la prueba real).</span>
+          Cada imagen de 320×240 que renderiza la cámara virtual pasa por <b>el mismo algoritmo de visión y control</b> del robot (portado de Python a JavaScript y verificado contra él).
           Nada del simulador le "dice" al robot dónde está la línea o el cilindro: solo ve píxeles.</p>
       </div>
     </div>
@@ -150,6 +153,16 @@
       <ol id="bitacora"></ol>
     </details>
   </section>
+
+  <!-- ============================== SIMULADOR 2: CAMARA BAJA ============================== -->
+  <section id="simulador-baja" class="sim sim-marco">
+    <iframe id="marco-baja" src="index.html?montaje=baja&amp;solo=1" title="Simulador 2: robot con la cámara al frente (baja)" loading="lazy"></iframe>
+  </section>
+  <script>
+    addEventListener('message', (e) => {
+      if (e.data && e.data.reto3Alto) document.getElementById('marco-baja').style.height = e.data.reto3Alto + 'px';
+    });
+  </script>
 
   <!-- ============================== ARQUITECTURA ============================== -->
   <section id="arquitectura" class="doc">
@@ -282,7 +295,7 @@
     <h2>Resultados</h2>
     <div class="dos-col">
       <div>
-        <h3>Entorno 3D (esta página)</h3>
+        <h3>Entorno 3D · cámara alta (diseño)</h3>
         <p>Vueltas completas en el simulador 3D: renderizado con luces y sombras, cilindros con manija, piso de baldosas, ruido de sensor,
           diferencia entre motores y latencia de una imagen. Se cuenta como completa si llega a la meta sin tocar ningún cilindro y sin salirse del tablero.</p>
         <table class="tabla" id="tabla-3d">
@@ -292,8 +305,13 @@
         <p class="nota">La desviación se mide del eje de las ruedas a la línea fuera de la maniobra de evasión; la máxima corresponde al
           regreso a la línea después de rodear un cilindro. En la vuelta 4 el robot tocó el segundo cilindro, que está en la salida de
           la curva en U: lo detectó a ~21 cm y la dirección estimada de la línea en ese punto salió desviada.</p>
+        <h3>Entorno 3D · cámara baja (webcam como en el robot real)</h3>
+        <table class="tabla" id="tabla-3d-baja">
+          <thead><tr><th>#</th><th>Semilla</th><th>Sentido</th><th>Cilindros</th><th>Tiempo</th><th>Esquivados</th><th>Desv. media / máx.</th><th>Resultado</th></tr></thead>
+          <tbody></tbody>
+        </table>
         <div class="grupo">
-          <button class="boton primario" id="b-evaluar">Evaluar 6 vueltas aquí</button>
+          <button class="boton primario b-evaluar" data-m="alta">Evaluar cámara alta</button>
           <span class="nota" id="eval-estado"></span>
         </div>
       </div>
@@ -304,6 +322,8 @@
           <tbody>
             <tr><td>Sin obstáculos, ambos sentidos</td><td><b>6 / 6</b></td><td>desviación máx. 2,0–3,2 cm, ~165 s por vuelta</td></tr>
             <tr><td>3 cilindros al azar, ambos sentidos</td><td><b>10 / 12</b></td><td>las 10 completas sin tocar cilindros, ~180 s</td></tr>
+            <tr><td>Cámara baja, sin obstáculos</td><td><b>0 / 6</b></td><td>recorre en promedio 260 cm (32 %) y se sale en las esquinas cerradas</td></tr>
+            <tr><td>Cámara baja, 3 cilindros</td><td><b>0 / 12</b></td><td>avance medio 224 cm; 7 cilindros esquivados en total, 9 salidas, 3 toques</td></tr>
           </tbody>
         </table>
         <h3>Limitaciones</h3>
@@ -311,15 +331,47 @@
           <li>Un cilindro a menos de ~15 cm después de una esquina de radio ~8 cm queda en la zona que barre el robot al girar; con 62° de campo no se ve antes.</li>
           <li>Con un cilindro justo antes de una esquina, el robot puede retomar la línea más adelante (atajo). Se puede fijar el lado con <span class="mono">EVASION_LADOS</span>.</li>
           <li>La memoria y la ruta usan el movimiento estimado del comando: hay que calibrar <span class="mono">V_MAX_CM_S</span> y los motores.</li>
-          <li>Todo está validado en simulación; falta la prueba en el robot real.</li>
+          <li>En la prueba real la cámara quedó baja (webcam al frente): así el robot pierde las esquinas cerradas. La cámara debe ir alta.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== MONTAJE DE LA CAMARA ============================== -->
+  <section id="montaje" class="doc">
+    <p class="etiqueta">5 · Prueba real y montaje de la cámara</p>
+    <h2>La cámara debe ir alta</h2>
+    <div class="dos-col">
+      <figure class="figura">
+        <img src="assets/robot_real.webp" alt="Robot XRP real con la Raspberry Pi encima y una webcam Logitech montada al frente, a pocos centímetros del piso, junto a un cilindro rojo" loading="lazy" width="868" height="690">
+        <figcaption>El robot de la prueba real: Raspberry Pi 5 sobre el XRP y una webcam USB Logitech al frente, a ~4,5 cm del piso.</figcaption>
+      </figure>
+      <div>
+        <p>En la pista real el robot se armó con una <b>webcam USB baja</b> en lugar de la Pi Camera en mástil. Con esa cámara el robot
+          siguió la línea en las rectas, pero en las curvas cerradas la perdía. La razón es geométrica:</p>
+        <table class="tabla">
+          <thead><tr><th></th><th>Cámara alta (diseño)</th><th>Cámara baja (webcam)</th></tr></thead>
+          <tbody>
+            <tr><td>Altura / inclinación</td><td>17 cm · 52°</td><td>4,5 cm · 12°</td></tr>
+            <tr><td>Piso visible (desde el eje)</td><td>11 a 39 cm</td><td>desde ~16 cm, casi rasante</td></tr>
+            <tr><td>Esquinas de radio ~8 cm</td><td>se ven mientras se toman</td><td>salen de la imagen antes de llegar</td></tr>
+            <tr><td>Error por 1° de inclinación (línea a 30 cm)</td><td>~0,8 cm</td><td>~1,9 cm</td></tr>
+            <tr><td>Simulador Python</td><td><b>6/6</b> sin obstáculos · <b>10/12</b> con cilindros</td><td><b>0/6</b> · <b>0/12</b></td></tr>
+          </tbody>
+        </table>
+        <p><b>Conclusión:</b> para que el robot funcione de la mejor manera la cámara debe ir <b>alta (12–17 cm) e inclinada hacia abajo
+          (45–52°)</b>, de modo que vea el piso desde justo delante del robot. Con la cámara baja el piso se ve casi rasante y desde lejos, la
+          posición de la línea es más sensible a un grado de error en la inclinación, y en las esquinas cerradas el robot se corta camino o pierde la línea. Las dos situaciones se pueden comparar en el
+          los dos simuladores de arriba (cámara alta y cámara al frente).</p>
+        <p class="nota">Otros hallazgos de la prueba real: el XRP tenía otro programa cargado (por eso no respondía el ping ni el botón),
+          y con pilas gastadas el XRP se reiniciaba al arrancar los motores. Ambos quedaron detectados por el programa (aviso de reinicio y de batería).</p>
       </div>
     </div>
   </section>
 
   <!-- ============================== CODIGO ============================== -->
   <section id="codigo" class="doc">
-    <p class="etiqueta">5 · Código</p>
+    <p class="etiqueta">6 · Código</p>
     <h2>Repositorio</h2>
     <div class="dos-col">
       <div>

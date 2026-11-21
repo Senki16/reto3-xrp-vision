@@ -22,8 +22,22 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 
+// montajes de la camara: alto (Pi Camera en mastil, el del diseno) y bajo (webcam USB al frente,
+// como quedo en el robot de la prueba real). Mismo codigo de vision y control; solo cambia la optica.
+const MONTAJES = {
+  alta: { CAM_ALTURA_CM: C.CAM_ALTURA_CM, CAM_ADELANTE_CM: C.CAM_ADELANTE_CM, CAM_INCLINACION: C.CAM_INCLINACION,
+    CAM_HFOV: C.CAM_HFOV, LINEA_ROI_SUP: C.LINEA_ROI_SUP, ROI_SUP_FRENO: C.ROI_SUP_FRENO },
+  baja: { CAM_ALTURA_CM: 4.5, CAM_ADELANTE_CM: 10.5, CAM_INCLINACION: 12.0, CAM_HFOV: 45.0, LINEA_ROI_SUP: 0.40, ROI_SUP_FRENO: 0.40 },
+};
+let montaje = 'alta';
+// la pagina muestra dos simuladores: el de arriba (camara alta) y, debajo, la misma pagina en un
+// marco con ?montaje=baja&solo=1 (solo el simulador, con la camara al frente)
+const params = new URLSearchParams(location.search);
+const SOLO = params.get('solo') === '1';
+if (SOLO) document.body.classList.add('solo');
+
 let escenaObj = crearEscena(pista, pista.antihorario.linea);
-const robot = crearRobot();
+let robot = crearRobot();
 escenaObj.escena.add(robot);
 let sim = new Simulador(renderer, escenaObj.escena, robot, pista);
 
@@ -281,6 +295,17 @@ function reiniciar() {
 }
 
 let lineaActual = 'antihorario';
+function cambiarMontaje(m) {
+  if (m === montaje) return;
+  montaje = m;
+  Object.assign(C, MONTAJES[m]);
+  escenaObj.escena.remove(robot);
+  robot = crearRobot();
+  escenaObj.escena.add(robot);
+  sim.robot = robot;
+  $$('.montaje-dato').forEach((e) => { e.hidden = e.dataset.m !== m; });
+}
+
 function reconstruirSiCambiaSentido() {
   const s = $('#c-sentido').value;
   if (s === lineaActual) return;
@@ -343,23 +368,25 @@ let evaluando = false;
 // cede el control al navegador sin el freno de setTimeout en pestanas en segundo plano
 const canal = new MessageChannel();
 const ceder = () => new Promise((r) => { canal.port1.onmessage = () => r(); canal.port2.postMessage(0); });
-const tbody = $('#tabla-3d tbody');
-function filaResultado(k, semilla, sentido, r) {
+const tablaDe = (m) => $(m === 'baja' ? '#tabla-3d-baja tbody' : '#tabla-3d tbody');
+function filaResultado(k, semilla, sentido, r, m = 'alta') {
   const tr = document.createElement('tr');
   tr.innerHTML = `<td>${k}</td><td>${semilla}</td><td>${sentido}</td><td class="mono">${r.cilindros.join(', ')}</td><td>${r.t.toFixed(0)} s</td><td>${r.evadidos}</td><td>${(r.desvMedia ?? 0).toFixed(1)} / ${r.desvMax.toFixed(1)} cm</td>
     <td class="${r.completa ? 'ok' : 'mal'}">${r.completa ? 'completa' : r.choque ? 'tocó cilindro' : r.salida ? 'salió' : 'incompleta'}</td>`;
-  tbody.appendChild(tr);
+  tablaDe(m).appendChild(tr);
 }
-function kpi3d(res) {
+function kpi3d(res, m = 'alta') {
   const ok = res.filter((r) => r.completa).length;
-  $('#kpi-3d').textContent = `${ok} / ${res.length}`;
+  $(m === 'baja' ? '#kpi-3d-baja' : '#kpi-3d').textContent = `${ok} / ${res.length}`;
 }
 
-async function evaluar() {
+async function evaluar(m = montaje) {
   if (evaluando) return;
   evaluando = true; corriendo = false;
-  $('#b-evaluar').disabled = true;
-  tbody.innerHTML = '';
+  $$('.b-evaluar').forEach((b) => { b.disabled = true; });
+  cambiarMontaje(m);
+  const tbody = tablaDe(m);
+  tbody.replaceChildren();
   const casos = [[201, 'antihorario'], [202, 'horario'], [203, 'antihorario'], [204, 'horario'], [205, 'antihorario'], [206, 'horario']];
   const res = [];
   for (let k = 0; k < casos.length; k++) {
@@ -375,29 +402,39 @@ async function evaluar() {
     }
     const r = sim.resultado();
     res.push({ semilla, sentido, ...r });
-    filaResultado(k + 1, semilla, sentido, r);
+    filaResultado(k + 1, semilla, sentido, r, m);
   }
-  kpi3d(res);
-  $('#eval-estado').textContent = `${res.filter((r) => r.completa).length} de 6 vueltas completas`;
+  kpi3d(res, m);
+  $('#eval-estado').textContent = `cámara ${m}: ${res.filter((r) => r.completa).length} de 6 vueltas completas`;
   window.__evaluacion3d = res;
   evaluando = false;
-  $('#b-evaluar').disabled = false;
+  $$('.b-evaluar').forEach((b) => { b.disabled = false; });
 }
-$('#b-evaluar').addEventListener('click', evaluar);
+$$('.b-evaluar').forEach((b) => b.addEventListener('click', () => evaluar(b.dataset.m)));
 
-// resultados ya medidos (si existen)
-try {
-  const r = await fetch('data/evaluacion3d.json', { cache: 'no-cache' });
-  if (r.ok) {
-    const res = await r.json();
-    res.forEach((x, k) => filaResultado(k + 1, x.semilla, x.sentido, x));
-    kpi3d(res);
-    $('#eval-estado').textContent = 'Resultados medidos en este navegador; puede repetir la evaluación (≈ 10–20 min).';
-  }
-} catch (e) { /* sin resultados previos */ }
+// resultados ya medidos (si existen), uno por montaje
+for (const [m, archivo] of [['alta', 'data/evaluacion3d.json'], ['baja', 'data/evaluacion3d_baja.json']]) {
+  try {
+    const r = await fetch(archivo, { cache: 'no-cache' });
+    if (r.ok) {
+      const res = await r.json();
+      res.forEach((x, k) => filaResultado(k + 1, x.semilla, x.sentido, x, m));
+      kpi3d(res, m);
+      $('#eval-estado').textContent = 'Resultados medidos en este navegador; puede repetir la evaluación (≈ 10–20 min por montaje).';
+    }
+  } catch (e) { /* sin resultados previos */ }
+}
 
+if (params.get('montaje') === 'baja') cambiarMontaje('baja');
 reiniciar();
 requestAnimationFrame(ciclo);
+if (SOLO && window.parent !== window) {
+  // avisa al marco de la pagina principal cuanto mide, para que no tenga barra de desplazamiento
+  const avisar = () => window.parent.postMessage({ reto3Alto: document.documentElement.scrollHeight }, '*');
+  new ResizeObserver(avisar).observe(document.body);
+  avisar();
+}
 window.__sim = () => sim;
 window.__renderizar = () => { camSuave.lista = false; actualizarCamara(); renderer.render(escenaObj.escena, camara); refrescarPaneles(); };
 window.__evaluar = evaluar;
+window.__montaje = cambiarMontaje;

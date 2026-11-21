@@ -144,17 +144,26 @@ export function crearRobot() {
     new THREE.Vector3(-9.2, rueda + 2.8, -1.5), new THREE.Vector3(-8.2, rueda + 1.5, -1.2)]), 20, 0.25, 8),
   new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.7 }));
   cuerpo.add(cable);
-  // mastil de la camara: el lente queda a CAM_ALTURA_CM y CAM_ADELANTE_CM del eje
   const xc = C.CAM_ADELANTE_CM, hc = C.CAM_ALTURA_CM;
-  const mastil = caja(1.2, hc - (rueda + 5.4), 1.6, soporteMat, { roughness: 0.8 });
-  mastil.position.set(xc - 1.4, (hc + rueda + 5.4) / 2 - 0.3, 0); cuerpo.add(mastil);
   const cabeza = new THREE.Group();
   cabeza.position.set(xc, hc, 0);
   cabeza.rotation.z = -THREE.MathUtils.degToRad(C.CAM_INCLINACION);
-  const pcb = caja(0.2, 2.5, 2.4, 0x1f7a3a); pcb.position.x = -0.35; cabeza.add(pcb);
-  const lente = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.6, 20), new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.2, metalness: 0.5 }));
-  lente.rotation.z = Math.PI / 2; lente.position.x = 0.05; cabeza.add(lente);
-  const cinta = caja(0.05, 3.0, 1.6, 0xd9b45a); cinta.position.set(-0.6, -1.6, 0); cabeza.add(cinta);
+  if (hc >= 8) {
+    // camara alta: Pi Camera en un mastil (el lente queda a CAM_ALTURA_CM y CAM_ADELANTE_CM del eje)
+    const mastil = caja(1.2, hc - (rueda + 5.4), 1.6, soporteMat, { roughness: 0.8 });
+    mastil.position.set(xc - 1.4, (hc + rueda + 5.4) / 2 - 0.3, 0); cuerpo.add(mastil);
+    const pcb = caja(0.2, 2.5, 2.4, 0x1f7a3a); pcb.position.x = -0.35; cabeza.add(pcb);
+    const lente = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.6, 20), new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.2, metalness: 0.5 }));
+    lente.rotation.z = Math.PI / 2; lente.position.x = 0.05; cabeza.add(lente);
+    const cinta = caja(0.05, 3.0, 1.6, 0xd9b45a); cinta.position.set(-0.6, -1.6, 0); cabeza.add(cinta);
+  } else {
+    // camara baja: webcam USB (tipo Logitech C270) al frente del chasis, casi horizontal
+    const cuerpoCam = new THREE.Mesh(new THREE.CapsuleGeometry(1.35, 4.6, 6, 16), new THREE.MeshStandardMaterial({ color: 0x1b1d21, roughness: 0.35, metalness: 0.2 }));
+    cuerpoCam.rotation.x = Math.PI / 2; cuerpoCam.scale.set(1, 1, 0.8); cuerpoCam.position.x = -1.0; cabeza.add(cuerpoCam);
+    const vidrio = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.3, 24), new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.1, metalness: 0.6 }));
+    vidrio.rotation.z = Math.PI / 2; vidrio.position.set(0.1, 0, 0); cabeza.add(vidrio);
+    const base = caja(2.2, 0.6, 3.0, 0x1b1d21); base.position.set(-1.4, -1.6, 0); cabeza.add(base);
+  }
   cuerpo.add(cabeza);
 
   // camara del robot (la que alimenta la vision): misma optica y montaje que config.py

@@ -176,3 +176,14 @@ li { margin: 0.25em 0; }
   .barra nav { display: none; }
   .fila-dos { grid-template-columns: 1fr; }
 }
+
+/* figura con pie (seccion de la prueba real) */
+.figura { margin: 0; }
+.figura img { display: block; width: 100%; height: auto; border-radius: var(--radio); border: 1px solid var(--linea, #d9dde3); }
+.figura figcaption { padding: 8px 2px 0; font-size: 0.86rem; color: var(--tinta-2); }
+
+/* dos simuladores: el segundo es la misma pagina en un marco, solo con el simulador */
+.sim-marco { padding-top: 0; }
+.sim-marco iframe { display: block; width: 100%; height: 1400px; border: 0; background: transparent; }
+body.solo > *:not(#simulador) { display: none !important; }
+body.solo #simulador { padding-top: 8px; }

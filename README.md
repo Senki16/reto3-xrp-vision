@@ -13,6 +13,11 @@ Cámara ──imagen──▶ Raspberry Pi (visión + decisión) ──"izq,der\
 🌐 **Sitio con el simulador 3D:** https://reto3-xrp-vision.vercel.app
 📄 **Informe:** [docs/Informe_Reto3_Actuadores_y_Sensores.pdf](docs/Informe_Reto3_Actuadores_y_Sensores.pdf)
 
+> **La cámara debe ir alta.** En la prueba real el robot se armó con una webcam USB al frente, a ~4,5 cm del piso, y así
+> pierde la línea en las curvas cerradas. Con el mismo programa, la cámara alta (17 cm, 52° hacia abajo) completa 6/6 vueltas
+> sin obstáculos y 10/12 con cilindros en simulación; la cámara baja, 0/6 y 0/12. La página tiene los **dos simuladores 3D**,
+> uno debajo del otro, para comparar los montajes.
+
 **Qué va en cada placa:** en el **XRP** solo [`xrp/main.py`](xrp/main.py) (guardado como `main.py` en su raíz);
 en la **Raspberry Pi** toda la carpeta [`raspberry/`](raspberry) (se ejecuta `python3 reto3.py`).
 
