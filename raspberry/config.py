@@ -147,8 +147,12 @@ def _cargar_local():
     ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config_local.json")
     if not os.path.exists(ruta):
         return
-    with open(ruta, encoding="utf-8") as f:
-        datos = json.load(f)
+    try:
+        with open(ruta, encoding="utf-8") as f:
+            datos = json.load(f)
+    except ValueError as e:
+        print("AVISO: config_local.json esta danado (%s): se ignora. Borrelo o vuelva a calibrar." % e)
+        return
     g = globals()
     for k, v in datos.items():
         if k in g and not k.startswith("_"):

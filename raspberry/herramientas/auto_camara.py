@@ -125,7 +125,10 @@ def main():
     datos = {"CAM_ALTURA_CM": a.altura, "CAM_ADELANTE_CM": a.adelante,
              "CAM_INCLINACION": round(t, 1), "CAM_HFOV": hfov, "LINEA_ROI_SUP": roi, "ROI_SUP_FRENO": roi}
     ruta = os.path.join(AQUI, "config_local.json")
-    previo = json.load(open(ruta, encoding="utf-8")) if os.path.exists(ruta) else {}
+    try:
+        previo = json.load(open(ruta, encoding="utf-8")) if os.path.exists(ruta) else {}
+    except ValueError:
+        previo = {}                          # archivo vacio o danado: se reemplaza
     previo.pop("HOMOGRAFIA", None)
     previo.update(datos)
     json.dump(previo, open(ruta, "w", encoding="utf-8"), indent=2)
