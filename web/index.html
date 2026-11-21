@@ -180,11 +180,11 @@
     <div class="explosionado">
       <img src="assets/sistema.webp" alt="Vista explosionada del robot: cámara, Raspberry Pi, portapilas, cable USB y XRP" loading="lazy">
       <ol class="leyenda">
-        <li><b>Cámara</b> Pi Camera en mástil: 17 cm de altura, 7 cm delante del eje, 52° hacia abajo, 62,2° de campo.</li>
-        <li><b>Raspberry Pi 4</b> visión + decisión en Python/OpenCV, ~30 imágenes por segundo.</li>
-        <li><b>Portapilas 18650</b> alimentación propia de la Pi.</li>
-        <li><b>Cable USB</b> enlace serial (<span class="mono">/dev/ttyACM0</span>, 115200) y tierra común.</li>
-        <li><b>XRP</b> controladora, motores y chasis: solo ejecuta la potencia de cada rueda.</li>
+        <li><b>Cámara</b><span>Pi Camera en mástil: 17 cm de altura, 7 cm delante del eje, 52° hacia abajo, 62,2° de campo.</span></li>
+        <li><b>Raspberry Pi 5</b><span>visión + decisión en Python/OpenCV, ~30 imágenes por segundo.</span></li>
+        <li><b>Portapilas 18650</b><span>alimentación propia de la Pi.</span></li>
+        <li><b>Cable USB</b><span>enlace serial (<span class="mono">/dev/ttyACM0</span>, 115200) y tierra común.</span></li>
+        <li><b>XRP</b><span>controladora, motores y chasis: solo ejecuta la potencia de cada rueda.</span></li>
       </ol>
     </div>
     <div class="dos-col">
@@ -196,7 +196,7 @@
           <g class="bloque"><rect x="356" y="50" width="120" height="64" rx="6"/><text x="416" y="80">XRP</text><text x="416" y="98" class="peq">main.py</text></g>
           <g class="bloque"><rect x="516" y="50" width="100" height="64" rx="6"/><text x="566" y="80">Motores</text><text x="566" y="98" class="peq">izq. / der.</text></g>
           <g class="flecha"><line x1="114" y1="82" x2="158" y2="82" marker-end="url(#fl)"/><text x="136" y="72" class="peq">imagen</text>
-            <line x1="310" y1="82" x2="354" y2="82" marker-end="url(#fl)"/><text x="332" y="72" class="peq">USB</text><text x="332" y="104" class="peq mono">"0.4,0.4\n"</text>
+            <line x1="310" y1="82" x2="354" y2="82" marker-end="url(#fl)"/><text x="332" y="72" class="peq">USB</text><line x1="332" y1="88" x2="332" y2="134" class="guia-texto"/><text x="332" y="150" class="peq mono">"0.4,0.4\n"</text>
             <line x1="476" y1="82" x2="514" y2="82" marker-end="url(#fl)"/><text x="495" y="72" class="peq">PWM</text></g>
         </svg>
         <p>El XRP no usa reflectancia, distancia ni IMU: solo convierte el comando de cada rueda en esfuerzo del motor.

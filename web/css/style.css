@@ -224,3 +224,4 @@ body.solo #simulador { padding-top: 8px; }
 }
 
 [id] { scroll-margin-top: 70px; }
+.diagrama .guia-texto { stroke: currentColor; stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.6; }
