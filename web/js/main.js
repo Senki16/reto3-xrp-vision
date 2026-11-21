@@ -357,9 +357,15 @@ function ciclo(ahora) {
   // ruedas girando
   const ruedas = robot.children[0].children.filter((m) => m.geometry && m.geometry.type === 'CylinderGeometry' && m.rotation.x === Math.PI / 2);
   ruedas.forEach((m) => { m.rotation.y = -sim.giroRuedas; });
-  actualizarCamara();
-  renderer.render(escenaObj.escena, camara);
-  if (ahora - ultPanel > 70) { refrescarPaneles(); ultPanel = ahora; }
+  // con la vista de los simuladores oculta no se dibuja (la simulacion sigue)
+  if (lienzo.offsetParent !== null) {
+    actualizarCamara();
+    renderer.render(escenaObj.escena, camara);
+    if (ahora - ultPanel > 70) { refrescarPaneles(); ultPanel = ahora; }
+  } else if (etapasVisibles && ahora - ultPanel > 70) {
+    dibujarEtapas();               // seccion Vision: etapas de la ultima imagen del robot
+    ultPanel = ahora;
+  }
   requestAnimationFrame(ciclo);
 }
 

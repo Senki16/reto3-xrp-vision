@@ -1,0 +1,135 @@
+[
+ {
+  "ruta": "xrp/main.py",
+  "archivo": "xrp__main.py",
+  "grupo": "XRP",
+  "desc": "Recibe los comandos por serial y mueve los motores (MicroPython).",
+  "lineas": 227
+ },
+ {
+  "ruta": "raspberry/reto3.py",
+  "archivo": "raspberry__reto3.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Programa principal: cámara → visión → decisión → serial.",
+  "lineas": 141
+ },
+ {
+  "ruta": "raspberry/config.py",
+  "archivo": "raspberry__config.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Todos los parámetros (cámara alta por defecto).",
+  "lineas": 167
+ },
+ {
+  "ruta": "raspberry/config_local.json  (solo cámara baja)",
+  "archivo": "config_local_baja.json",
+  "grupo": "Raspberry Pi",
+  "desc": "Geometría de la webcam baja usada en la prueba real (la carpeta 2 de la entrega).",
+  "lineas": 8
+ },
+ {
+  "ruta": "raspberry/vision.py",
+  "archivo": "raspberry__vision.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Detección de la línea, del rojo y de la línea de meta.",
+  "lineas": 371
+ },
+ {
+  "ruta": "raspberry/geometria.py",
+  "archivo": "raspberry__geometria.py",
+  "grupo": "Raspberry Pi",
+  "desc": "De píxeles a centímetros sobre el piso.",
+  "lineas": 94
+ },
+ {
+  "ruta": "raspberry/control.py",
+  "archivo": "raspberry__control.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Máquina de estados, seguimiento y evasión.",
+  "lineas": 690
+ },
+ {
+  "ruta": "raspberry/piloto.py",
+  "archivo": "raspberry__piloto.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Une visión y control en cada imagen.",
+  "lineas": 39
+ },
+ {
+  "ruta": "raspberry/camara.py",
+  "archivo": "raspberry__camara.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Lectura de la Pi Camera o de la webcam USB.",
+  "lineas": 92
+ },
+ {
+  "ruta": "raspberry/xrp_link.py",
+  "archivo": "raspberry__xrp_link.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Enlace serial con el XRP (reconexión, avisos).",
+  "lineas": 165
+ },
+ {
+  "ruta": "raspberry/stream.py",
+  "archivo": "raspberry__stream.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Video de la cámara en el navegador.",
+  "lineas": 62
+ },
+ {
+  "ruta": "raspberry/prueba_serial.py",
+  "archivo": "raspberry__prueba_serial.py",
+  "grupo": "Raspberry Pi",
+  "desc": "Prueba de comunicación y motores.",
+  "lineas": 86
+ },
+ {
+  "ruta": "raspberry/herramientas/auto_camara.py",
+  "archivo": "raspberry__herramientas__auto_camara.py",
+  "grupo": "Herramientas",
+  "desc": "Calibra la inclinación de la cámara con una recta.",
+  "lineas": 149
+ },
+ {
+  "ruta": "raspberry/herramientas/medir_camara.py",
+  "archivo": "raspberry__herramientas__medir_camara.py",
+  "grupo": "Herramientas",
+  "desc": "Homografía con una hoja carta en el piso.",
+  "lineas": 77
+ },
+ {
+  "ruta": "raspberry/herramientas/calibrar.py",
+  "archivo": "raspberry__herramientas__calibrar.py",
+  "grupo": "Herramientas",
+  "desc": "Ajuste de colores y umbral con fotos.",
+  "lineas": 77
+ },
+ {
+  "ruta": "raspberry/herramientas/capturar.py",
+  "archivo": "raspberry__herramientas__capturar.py",
+  "grupo": "Herramientas",
+  "desc": "Toma fotos con la cámara del robot.",
+  "lineas": 48
+ },
+ {
+  "ruta": "usb/sistema/vigia.sh",
+  "archivo": "usb__sistema__vigia.sh",
+  "grupo": "Arranque USB",
+  "desc": "Servicio que arranca el robot al conectar la memoria.",
+  "lineas": 157
+ },
+ {
+  "ruta": "usb/INSTALAR_EN_LA_PI.sh",
+  "archivo": "usb__INSTALAR_EN_LA_PI.sh",
+  "grupo": "Arranque USB",
+  "desc": "Instalador del arranque automático.",
+  "lineas": 79
+ },
+ {
+  "ruta": "simulador/sim.py",
+  "archivo": "simulador__sim.py",
+  "grupo": "Simulador",
+  "desc": "Simulador en Python con el mismo código del robot.",
+  "lineas": 275
+ }
+]

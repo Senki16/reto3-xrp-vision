@@ -1,0 +1,8 @@
+{
+  "CAM_ALTURA_CM": 4.5,
+  "CAM_ADELANTE_CM": 8.0,
+  "CAM_INCLINACION": 12.0,
+  "CAM_HFOV": 45.0,
+  "LINEA_ROI_SUP": 0.4,
+  "ROI_SUP_FRENO": 0.4
+}

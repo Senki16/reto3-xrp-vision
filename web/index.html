@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <script type="importmap">
     { "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -22,45 +23,22 @@
 </head>
 <body>
   <header class="barra">
-    <a class="marca" href="#inicio"><span class="marca-cod">R3</span> Visión artificial · XRP</a>
-    <nav>
-      <a href="#simulador">Simulador 3D</a>
-      <a href="#arquitectura">Arquitectura</a>
-      <a href="#vision">Visión</a>
-      <a href="#control">Control</a>
-      <a href="#evaluacion">Evaluación</a>
-      <a href="#montaje">Prueba real</a>
-      <a href="#codigo">Código</a>
+    <a class="marca" href="#simuladores"><span class="marca-cod">R3</span> Visión artificial · XRP</a>
+    <nav id="menu">
+      <a href="#simuladores" data-vista="simuladores">Simuladores 3D</a>
+      <a href="#proyecto" data-vista="proyecto">Proyecto</a>
+      <a href="#arquitectura" data-vista="arquitectura">Arquitectura</a>
+      <a href="#vision" data-vista="vision">Visión</a>
+      <a href="#control" data-vista="control">Control</a>
+      <a href="#evaluacion" data-vista="evaluacion">Evaluación</a>
+      <a href="#prueba" data-vista="prueba">Prueba real</a>
+      <a href="#codigo" data-vista="codigo">Código</a>
     </nav>
     <a class="boton-gh" id="enlace-gh" href="https://github.com/Senki16/reto3-xrp-vision" target="_blank" rel="noopener">GitHub</a>
   </header>
 
-  <!-- ============================== INICIO ============================== -->
-  <section id="inicio" class="heroe">
-    <div class="heroe-texto">
-      <p class="etiqueta">Actuadores y Sensores · Universidad EAFIT · 2026-2</p>
-      <h1>Seguimiento de línea y evasión de obstáculos <span class="acento">solo con visión</span></h1>
-      <p class="bajada">Un robot XRP recorre la pista y esquiva tres cilindros rojos usando únicamente la cámara de una Raspberry Pi.
-        La Pi procesa la imagen y decide. El XRP solo recibe por USB la potencia de cada rueda.</p>
-      <div class="heroe-botones">
-        <a class="boton primario" href="#simulador">Abrir el simulador 3D</a>
-        <a class="boton" href="#evaluacion">Ver la evaluación</a>
-      </div>
-      <p class="equipo">David Zuluaga Henao · Alejandro Nanclares · Nicolás Zapata Jurado — Prof. Felipe Mendoza Giraldo</p>
-    </div>
-    <figure class="heroe-figura">
-      <img src="assets/heroe.webp" alt="Render del robot XRP con Raspberry Pi y cámara sobre la pista con un cilindro rojo" loading="eager">
-    </figure>
-  </section>
-
-  <section class="kpis">
-    <div><b id="kpi-sin">6 / 6</b><span>vueltas sin obstáculos<br>(simulador Python)</span></div>
-    <div><b id="kpi-con">10 / 12</b><span>vueltas con 3 cilindros<br>(simulador Python)</span></div>
-    <div><b id="kpi-3d">—</b><span>vueltas en 3D con la<br>cámara alta (esta página)</span></div>
-    <div><b id="kpi-3d-baja">—</b><span>vueltas en 3D con la<br>cámara baja (webcam)</span></div>
-    <div><b>≤ 3,2 cm</b><span>desviación máxima a la línea<br>sin obstáculos</span></div>
-  </section>
-
+  <!-- ============================== VISTA: SIMULADORES (primera) ============================== -->
+  <div class="vista" id="simuladores" data-vista="simuladores">
   <!-- ============================== SIMULADOR ============================== -->
   <section id="simulador" class="sim">
     <div class="sim-cab">
@@ -164,8 +142,39 @@
     });
   </script>
 
+  </div>
+
+  <!-- ============================== VISTA: PROYECTO ============================== -->
+  <div class="vista" id="proyecto" data-vista="proyecto">
+  <!-- ============================== INICIO ============================== -->
+  <section id="inicio" class="heroe">
+    <div class="heroe-texto">
+      <p class="etiqueta">Actuadores y Sensores · Universidad EAFIT · 2026-2</p>
+      <h1>Seguimiento de línea y evasión de obstáculos <span class="acento">solo con visión</span></h1>
+      <p class="bajada">Un robot XRP recorre la pista y esquiva tres cilindros rojos usando únicamente la cámara de una Raspberry Pi.
+        La Pi procesa la imagen y decide. El XRP solo recibe por USB la potencia de cada rueda.</p>
+      <div class="heroe-botones">
+        <a class="boton primario" href="#simulador">Abrir el simulador 3D</a>
+        <a class="boton" href="#evaluacion">Ver la evaluación</a>
+      </div>
+      <p class="equipo">David Zuluaga Henao · Alejandro Nanclares · Nicolás Zapata Jurado — Prof. Felipe Mendoza Giraldo</p>
+    </div>
+    <figure class="heroe-figura">
+      <img src="assets/heroe.webp" alt="Render del robot XRP con Raspberry Pi y cámara sobre la pista con un cilindro rojo" loading="eager">
+    </figure>
+  </section>
+
+  <section class="kpis">
+    <div><b id="kpi-sin">6 / 6</b><span>vueltas sin obstáculos<br>(simulador Python)</span></div>
+    <div><b id="kpi-con">10 / 12</b><span>vueltas con 3 cilindros<br>(simulador Python)</span></div>
+    <div><b id="kpi-3d">—</b><span>vueltas en 3D con la<br>cámara alta (esta página)</span></div>
+    <div><b id="kpi-3d-baja">—</b><span>vueltas en 3D con la<br>cámara baja (webcam)</span></div>
+    <div><b>≤ 3,2 cm</b><span>desviación máxima a la línea<br>sin obstáculos</span></div>
+  </section>
+  </div>
+
   <!-- ============================== ARQUITECTURA ============================== -->
-  <section id="arquitectura" class="doc">
+  <section id="arquitectura" class="doc vista" data-vista="arquitectura">
     <p class="etiqueta">1 · Arquitectura</p>
     <h2>Cámara → Raspberry Pi → serial USB → XRP → motores</h2>
     <div class="explosionado">
@@ -212,7 +221,7 @@
   </section>
 
   <!-- ============================== VISION ============================== -->
-  <section id="vision" class="doc alterna">
+  <section id="vision" class="doc alterna vista" data-vista="vision">
     <p class="etiqueta">2 · Visión artificial</p>
     <h2>De píxeles a centímetros sobre el piso</h2>
     <p class="intro">Estas son las etapas de la imagen que está viendo ahora el robot del simulador (se actualizan en vivo).</p>
@@ -244,7 +253,7 @@
   </section>
 
   <!-- ============================== CONTROL ============================== -->
-  <section id="control" class="doc">
+  <section id="control" class="doc vista" data-vista="control">
     <p class="etiqueta">3 · Control</p>
     <h2>Máquina de estados</h2>
     <svg class="diagrama estados" viewBox="0 -45 900 260" role="img" aria-label="Máquina de estados">
@@ -290,7 +299,7 @@
   </section>
 
   <!-- ============================== EVALUACION ============================== -->
-  <section id="evaluacion" class="doc alterna">
+  <section id="evaluacion" class="doc alterna vista" data-vista="evaluacion">
     <p class="etiqueta">4 · Evaluación</p>
     <h2>Resultados</h2>
     <div class="dos-col">
@@ -338,7 +347,8 @@
   </section>
 
   <!-- ============================== MONTAJE DE LA CAMARA ============================== -->
-  <section id="montaje" class="doc">
+  <section id="prueba" class="doc vista" data-vista="prueba">
+    <span id="montaje"></span>
     <p class="etiqueta">5 · Prueba real y montaje de la cámara</p>
     <h2>La cámara debe ir alta</h2>
     <figure class="figura video-prueba">
@@ -373,34 +383,72 @@
           y con pilas gastadas el XRP se reiniciaba al arrancar los motores. Ambos quedaron detectados por el programa (aviso de reinicio y de batería).</p>
       </div>
     </div>
+  
+    <h3 class="sub-seccion">Bitácora de la prueba: capturas de la Raspberry Pi (Guacamole)</h3>
+    <p class="nota">La Raspberry Pi del laboratorio se manejó por escritorio remoto (Guacamole). Estas son las terminales en el orden en que pasaron, con el problema que mostró cada una y cómo se resolvió.</p>
+    <div class="galeria">
+      <figure><a href="assets/guacamole/01.webp" target="_blank" rel="noopener"><img src="assets/guacamole/01.webp" alt="Terminal de la Raspberry Pi: Primera prueba en la Pi" loading="lazy" width="834" height="609"></a>
+        <figcaption><b>1.</b> Primera prueba en la Pi: sin mpremote, el XRP no responde el ping, el enlace se cae al mover los motores y falta OpenCV (No module named cv2).</figcaption></figure>
+      <figure><a href="assets/guacamole/02.webp" target="_blank" rel="noopener"><img src="assets/guacamole/02.webp" alt="Terminal de la Raspberry Pi: mpremote instalado y main.py subido al XRP" loading="lazy" width="834" height="609"></a>
+        <figcaption><b>2.</b> mpremote instalado y main.py subido al XRP: ping OK, pero el enlace se sigue cayendo al arrancar los motores.</figcaption></figure>
+      <figure><a href="assets/guacamole/03.webp" target="_blank" rel="noopener"><img src="assets/guacamole/03.webp" alt="Terminal de la Raspberry Pi: El XRP avisa que se reinició (INICIO causa=PWRON_RESET, batería=True)" loading="lazy" width="834" height="609"></a>
+        <figcaption><b>3.</b> El XRP avisa que se reinició (INICIO causa=PWRON_RESET, batería=True): le falta corriente al arrancar los motores.</figcaption></figure>
+      <figure><a href="assets/guacamole/04.webp" target="_blank" rel="noopener"><img src="assets/guacamole/04.webp" alt="Terminal de la Raspberry Pi: La alimentación de la Raspberry Pi está bien" loading="lazy" width="834" height="609"></a>
+        <figcaption><b>4.</b> La alimentación de la Raspberry Pi está bien: throttled=0x0, EXT5V = 4,97 V y ninguna desconexión USB.</figcaption></figure>
+      <figure><a href="assets/guacamole/05.webp" target="_blank" rel="noopener"><img src="assets/guacamole/05.webp" alt="Terminal de la Raspberry Pi: Con pilas nuevas" loading="lazy" width="834" height="609"></a>
+        <figcaption><b>5.</b> Con pilas nuevas: ping OK, 83 respuestas, 0 errores y 0 reinicios. «Comunicación y motores OK».</figcaption></figure>
+      <figure><a href="assets/guacamole/06.webp" target="_blank" rel="noopener"><img src="assets/guacamole/06.webp" alt="Terminal de la Raspberry Pi: OpenCV 5.1 instalado con pip" loading="lazy" width="834" height="609"></a>
+        <figcaption><b>6.</b> OpenCV 5.1 instalado con pip: el programa se cae con «Bus error». Se cambió a OpenCV 4.10.</figcaption></figure>
+      <figure><a href="assets/guacamole/07.webp" target="_blank" rel="noopener"><img src="assets/guacamole/07.webp" alt="Terminal de la Raspberry Pi: La webcam USB no acepta el control FrameRate de libcamera (RuntimeError). camara.py ahora lo omite." loading="lazy" width="834" height="609"></a>
+        <figcaption><b>7.</b> La webcam USB no acepta el control FrameRate de libcamera (RuntimeError). camara.py ahora lo omite.</figcaption></figure>
+      <figure><a href="assets/guacamole/08.webp" target="_blank" rel="noopener"><img src="assets/guacamole/08.webp" alt="Terminal de la Raspberry Pi: Primera vuelta con la webcam baja" loading="lazy" width="834" height="609"></a>
+        <figcaption><b>8.</b> Primera vuelta con la webcam baja: el registro alterna SEGUIR / BUSCAR cada medio segundo; pierde la línea.</figcaption></figure>
+      <figure><a href="assets/guacamole/09.webp" target="_blank" rel="noopener"><img src="assets/guacamole/09.webp" alt="Terminal de la Raspberry Pi: Calibración con auto_camara.py y programa esperando el botón; ping SIN RESPUESTA porque el XRP cambiado tenía otro programa." loading="lazy" width="834" height="609"></a>
+        <figcaption><b>9.</b> Calibración con auto_camara.py y programa esperando el botón; ping SIN RESPUESTA porque el XRP cambiado tenía otro programa.</figcaption></figure>
+    </div>
   </section>
 
   <!-- ============================== CODIGO ============================== -->
-  <section id="codigo" class="doc">
-    <p class="etiqueta">6 · Código</p>
-    <h2>Repositorio</h2>
+  <section id="codigo" class="doc vista" data-vista="codigo">
+    <p class="etiqueta">7 · Código</p>
+    <h2>El código del robot</h2>
+    <p class="intro">Los mismos archivos que van en el robot. El programa es igual para los dos montajes de la cámara: la cámara baja
+      solo agrega <span class="mono">config_local.json</span>. En la entrega están separados en
+      <b>1_CODIGO_CAMARA_ALTA (funciona)</b> y <b>2_CODIGO_CAMARA_BAJA (prueba real, con errores)</b>.</p>
+    <div class="visor">
+      <aside class="visor-lista" id="visor-lista" aria-label="Archivos"></aside>
+      <div class="visor-codigo">
+        <div class="visor-cab"><span class="mono" id="visor-ruta">—</span><span class="nota" id="visor-desc"></span>
+          <a class="boton" id="visor-descarga" href="#" download>Descargar</a></div>
+        <pre><code id="visor-texto" class="hljs">Cargando…</code></pre>
+      </div>
+    </div>
     <div class="dos-col">
       <div>
+        <h3>Dónde va cada parte</h3>
         <table class="tabla">
           <thead><tr><th>Carpeta</th><th>Contenido</th></tr></thead>
           <tbody>
-            <tr><td class="mono">xrp/main.py</td><td>Programa del XRP (MicroPython): comandos por serial, compensación de motores.</td></tr>
-            <tr><td class="mono">raspberry/</td><td>Programa de la Pi: visión, geometría, control, serial, cámara, video en el navegador, herramientas de calibración.</td></tr>
+            <tr><td class="mono">xrp/main.py</td><td>En el XRP (raíz, nombre <span class="mono">main.py</span>): comandos por serial, linealización y arranque suave de los motores.</td></tr>
+            <tr><td class="mono">raspberry/</td><td>En la Raspberry Pi: visión, geometría, control, serial, cámara, video en el navegador y calibración.</td></tr>
+            <tr><td class="mono">usb/</td><td>Arranque automático del robot al conectar la memoria USB.</td></tr>
             <tr><td class="mono">simulador/</td><td>Simulador Python (cámara por trazado de rayos) y pruebas por lotes.</td></tr>
-            <tr><td class="mono">web/</td><td>Esta página y el simulador 3D (visión y control portados a JavaScript).</td></tr>
+            <tr><td class="mono">web/</td><td>Esta página y los simuladores 3D (visión y control portados a JavaScript).</td></tr>
           </tbody>
         </table>
       </div>
       <div>
+        <h3>Comandos</h3>
         <pre class="codigo"><code># en la Raspberry Pi
-python3 prueba_serial.py          # enlace y calibración de motores
-python3 reto3.py --stream         # http://&lt;ip-de-la-pi&gt;:8080
+python3 prueba_serial.py                 # comunicación y motores
+python3 reto3.py --sin-xrp --stream      # ver la cámara: http://&lt;ip-de-la-pi&gt;:8080
+python3 reto3.py --grabar --stream       # la vuelta (botón del XRP para salir)
 
 # en el computador
 cd simulador
 python sim.py --semilla 100 --video
 python correr_lote.py 12</code></pre>
-        <a class="boton primario" id="enlace-gh2" href="https://github.com/Senki16/reto3-xrp-vision" target="_blank" rel="noopener">Ver el código en GitHub</a>
+        <a class="boton primario" id="enlace-gh2" href="https://github.com/Senki16/reto3-xrp-vision" target="_blank" rel="noopener">Ver todo en GitHub</a>
       </div>
     </div>
   </section>
@@ -410,6 +458,7 @@ python correr_lote.py 12</code></pre>
     <p class="nota">Simulador 3D con <a href="https://threejs.org" target="_blank" rel="noopener">Three.js</a>. Pista del Reto 1 a escala (99,4 × 198,5 cm).</p>
   </footer>
 
+  <script src="js/vistas.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
