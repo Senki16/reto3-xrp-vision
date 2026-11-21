@@ -23,10 +23,15 @@ class Camara:
                 fuente = "usb"
         if fuente == "pi":
             self.picam = Picamera2()
-            conf = self.picam.create_video_configuration(
-                main={"size": (cfg.CAM_ANCHO, cfg.CAM_ALTO), "format": "RGB888"},
-                controls={"FrameRate": cfg.CAM_FPS})
-            self.picam.configure(conf)
+            main = {"size": (cfg.CAM_ANCHO, cfg.CAM_ALTO), "format": "RGB888"}
+            try:
+                self.picam.configure(self.picam.create_video_configuration(
+                    main=main, controls={"FrameRate": cfg.CAM_FPS}))
+            except RuntimeError as e:
+                # algunas camaras (p. ej. webcams USB vistas por libcamera) no tienen
+                # todos los controles: se configura sin pedir la velocidad de cuadros
+                print("Camara: %s -> se configura sin FrameRate" % e)
+                self.picam.configure(self.picam.create_video_configuration(main=main))
             self.picam.start()
             time.sleep(2.0)                     # dejar que ajuste exposicion y blancos
             if cfg.CAM_FIJAR_EXPOSICION:
