@@ -192,6 +192,7 @@ body.solo #simulador { padding-top: 8px; }
 .video-prueba { margin: 0 0 20px; }
 .aviso-ok { margin: 0 0 28px; padding: 14px 18px; border-left: 4px solid var(--ok); background: rgba(47, 191, 113, 0.08); border-radius: 0 var(--radio) var(--radio) 0; }
 .aviso-ok p { margin: 0; }
+.descarga-entrega { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 0 0 22px; }
 .video-prueba video { display: block; width: 100%; height: auto; border-radius: var(--radio); background: #000; }
 
 /* pagina por secciones: una vista a la vez */
