@@ -8,9 +8,7 @@ grados hacia abajo). Es el que se ve al principio del video (carpeta 6_VIDEO,
 "01 - PRUEBA FUNCIONAL").
 
 Se hizo en colaboracion con el grupo de Maximiliano: la prueba se hizo en
-conjunto, con la misma maqueta y el mismo XRP. Se le quitaron los comentarios
-y los textos de documentacion; el programa es el mismo (se comprobo que el
-arbol de sintaxis de cada archivo no cambio).
+conjunto, con la misma maqueta y el mismo XRP.
 
 Tambien esta portado a JavaScript en la pagina web, como el SIMULADOR 3 (debajo
 de los otros dos simuladores 3D): https://reto3-xrp-vision.vercel.app

@@ -26,7 +26,7 @@ CONTENIDO
       El codigo que FUNCIONO en la prueba real, hecho en colaboracion con el
       grupo de Maximiliano (misma maqueta y mismo XRP). Con la webcam baja
       (~3,7 cm del piso, ~18 grados hacia abajo) el robot recorrio la pista
-      siguiendo la linea, sin obstaculos. Sin comentarios. Ver LEEME.txt.
+      siguiendo la linea, sin obstaculos. Ver LEEME.txt.
       En la pagina web esta portado como el SIMULADOR 3.
 
  4_SIMULADOR/        simulador en Python (solo computador)

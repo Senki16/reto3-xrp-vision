@@ -28,7 +28,7 @@ ARCHIVOS = [
     ("usb/INSTALAR_EN_LA_PI.sh", "Arranque USB", "Instalador del arranque automático."),
     ("simulador/sim.py", "Simulador", "Simulador en Python con el mismo código del robot."),
     ("web/js/robot/max.js", "Simulador", "Port a JavaScript del código de la prueba real (simulador 3)."),
-    # el codigo que funciono en la prueba real, hecho con el grupo de Max (sin comentarios)
+    # el codigo que funciono en la prueba real, hecho con el grupo de Max
     ("prueba_real_max/reto3.py", "Prueba real (con el grupo de Max)", "Programa principal: sigue la línea, esquinas, búsqueda y vuelta de marca a marca."),
     ("prueba_real_max/follow_line.py", "Prueba real (con el grupo de Max)", "Detección de la línea: brillo relativo al tapete de alrededor."),
     ("prueba_real_max/ahead.py", "Prueba real (con el grupo de Max)", "Mirada adelantada: hacia dónde sigue la línea."),

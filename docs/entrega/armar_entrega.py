@@ -37,7 +37,7 @@ json.dump({"CAM_ALTURA_CM": 4.5, "CAM_ADELANTE_CM": 8.0, "CAM_INCLINACION": 12.0
           open(os.path.join(DEST, BAJA, "2_RASPBERRY_PI", "reto3", "config_local.json"), "w"), indent=2)
 shutil.copy2(os.path.join(AQUI, "LEEME_ALTA.txt"), os.path.join(DEST, ALTA, "LEEME.txt"))
 shutil.copy2(os.path.join(AQUI, "LEEME_BAJA.txt"), os.path.join(DEST, BAJA, "LEEME - ERRORES Y CAUSAS.txt"))
-# el codigo que funciono en la prueba real (con el grupo de Max), sin comentarios
+# el codigo que funciono en la prueba real (con el grupo de Max)
 shutil.copytree(os.path.join(RAIZ, "prueba_real_max"), os.path.join(DEST, MAX, "reto3"), ignore=IGN)
 shutil.copy2(os.path.join(AQUI, "LEEME_MAX.txt"), os.path.join(DEST, MAX, "LEEME.txt"))
 

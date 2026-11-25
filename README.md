@@ -20,7 +20,7 @@ Cámara ──imagen──▶ Raspberry Pi (visión + decisión) ──"izq,der\
 >
 > **Código de la prueba real:** [`prueba_real_max/`](prueba_real_max), hecho en colaboración con el grupo de Max. Es el que
 > funcionó en la pista real: sin obstáculos y con la cámara baja (webcam C270 a ~3,7 cm, ~18° hacia abajo) recorrió la pista
-> siguiendo la línea. Va sin comentarios; está portado a JavaScript en [`web/js/robot/max.js`](web/js/robot/max.js) (simulador 3).
+> siguiendo la línea. Está portado a JavaScript en [`web/js/robot/max.js`](web/js/robot/max.js) (simulador 3).
 
 **Qué va en cada placa:** en el **XRP** solo [`xrp/main.py`](xrp/main.py) (guardado como `main.py` en su raíz);
 en la **Raspberry Pi** toda la carpeta [`raspberry/`](raspberry) (se ejecuta `python3 reto3.py`).
