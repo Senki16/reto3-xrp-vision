@@ -11,7 +11,7 @@ Que es esta carpeta
 
 Que funciono en la pista
   - Comunicacion serial Pi-XRP: ping OK, 83 respuestas, 0 errores, 0 reinicios.
-  - Seguimiento de la linea en rectas y curvas suaves (ver 5_VIDEO).
+  - Seguimiento de la linea en rectas y curvas suaves (ver 6_VIDEO).
   - Salida desde la linea transversal con el boton del XRP.
 
 Errores y causas

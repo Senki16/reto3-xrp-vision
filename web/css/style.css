@@ -187,9 +187,11 @@ li { margin: 0.25em 0; }
 .sim-marco { padding-top: 0; }
 .sim-marco iframe { display: block; width: 100%; height: 1400px; border: 0; background: transparent; }
 body.solo > *:not(#simuladores) { display: none !important; }
-body.solo #simulador-baja { display: none !important; }
+body.solo .sim-marco { display: none !important; }
 body.solo #simulador { padding-top: 8px; }
-.video-prueba { margin: 0 0 28px; }
+.video-prueba { margin: 0 0 20px; }
+.aviso-ok { margin: 0 0 28px; padding: 14px 18px; border-left: 4px solid var(--ok); background: rgba(47, 191, 113, 0.08); border-radius: 0 var(--radio) var(--radio) 0; }
+.aviso-ok p { margin: 0; }
 .video-prueba video { display: block; width: 100%; height: auto; border-radius: var(--radio); background: #000; }
 
 /* pagina por secciones: una vista a la vez */

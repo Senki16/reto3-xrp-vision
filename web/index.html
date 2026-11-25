@@ -44,11 +44,12 @@
     <div class="sim-cab">
       <div>
         <p class="etiqueta">Entorno 3D en el navegador</p>
-        <h2><span class="montaje-dato" data-m="alta">Simulador 1 · cámara alta (diseño)</span><span class="montaje-dato" data-m="baja" hidden>Simulador 2 · cámara al frente (baja)</span></h2>
-        <p class="nota">Hay <b>dos simulaciones</b>, una por cada montaje de la cámara que se probó: arriba la cámara alta y debajo la cámara al frente.
+        <h2><span class="montaje-dato" data-m="alta">Simulador 1 · cámara alta (diseño)</span><span class="montaje-dato" data-m="baja" hidden>Simulador 2 · cámara al frente (baja)</span><span class="montaje-dato" data-m="max" hidden>Simulador 3 · código de la prueba real (con el grupo de Max)</span></h2>
+        <p class="nota">Hay <b>tres simulaciones</b>: arriba la cámara alta, debajo la cámara al frente (las dos con nuestro código) y al final el código de la prueba real, hecho con el grupo de Max.
           <span class="montaje-dato" data-m="alta"><b>cámara alta</b>: Pi Camera en un mástil, 17 cm sobre el piso, 52° hacia abajo, 62,2° de campo (el diseño del reto).</span>
           <span class="montaje-dato" data-m="baja" hidden><b>cámara baja</b>: webcam USB Logitech al frente del chasis, 4,5 cm sobre el piso, 12° hacia abajo, 45° de campo (como quedó el robot de la prueba real).</span>
-          Cada imagen de 320×240 que renderiza la cámara virtual pasa por <b>el mismo algoritmo de visión y control</b> del robot (portado de Python a JavaScript y verificado contra él).
+          <span class="montaje-dato" data-m="max" hidden><b>código de la prueba real</b>, hecho en colaboración con el grupo de Max: es el que <b>funcionó en la pista real</b>, sin obstáculos, con la cámara baja (webcam Logitech C270 al frente, 3,7 cm sobre el piso, ~18° hacia abajo, 45° de campo). Aquí corre un port a JavaScript de su detección de la línea (brillo relativo al tapete de alrededor) y de su conducción a pulsos cortos (esquinas, búsqueda en barrido y la marca de salida). Es un port simplificado: no incluye su mirada adelantada, la memoria de lugares ni el refuerzo de potencia cuando la cámara no ve movimiento. El modelo de motores usa su zona muerta (~0,27) y su tope de potencia (0,59). En simulación completó <b>6 de 6 vueltas sin obstáculos</b> (en los dos sentidos, 135–144 s, desviación máxima 7,7 cm).</span>
+          <span class="montaje-dato" data-m="alta baja">Cada imagen de 320×240 que renderiza la cámara virtual pasa por <b>el mismo algoritmo de visión y control</b> del robot (portado de Python a JavaScript y verificado contra él).</span>
           Nada del simulador le "dice" al robot dónde está la línea o el cilindro: solo ve píxeles.</p>
       </div>
     </div>
@@ -136,9 +137,14 @@
   <section id="simulador-baja" class="sim sim-marco">
     <iframe id="marco-baja" src="index.html?montaje=baja&amp;solo=1" title="Simulador 2: robot con la cámara al frente (baja)" loading="lazy"></iframe>
   </section>
+  <!-- ============================== SIMULADOR 3: CODIGO DE LA PRUEBA REAL (GRUPO DE MAX) ============================== -->
+  <section id="simulador-max" class="sim sim-marco">
+    <iframe id="marco-max" src="index.html?montaje=max&amp;solo=1" title="Simulador 3: código de la prueba real, hecho con el grupo de Max" loading="lazy"></iframe>
+  </section>
   <script>
     addEventListener('message', (e) => {
-      if (e.data && e.data.reto3Alto) document.getElementById('marco-baja').style.height = e.data.reto3Alto + 'px';
+      if (!e.data || !e.data.reto3Alto) return;
+      for (const f of document.querySelectorAll('.sim-marco iframe')) if (f.contentWindow === e.source) f.style.height = e.data.reto3Alto + 'px';
     });
   </script>
 
@@ -357,6 +363,9 @@
       </video>
       <figcaption>Montaje de la prueba en la pista real (2 min 34 s). Empieza con la prueba funcional, hecha en conjunto con el equipo de Maximiliano con la misma maqueta y el mismo XRP: el robot recorre la pista siguiendo la línea solo con la cámara. Al final, las fallas en las esquinas cerradas.</figcaption>
     </figure>
+    <div class="aviso-ok">
+      <p><b>El código que funcionó en la prueba real</b> se hizo en colaboración con el grupo de Max. Con la <b>cámara baja</b> (webcam Logitech C270 al frente, ~3,7 cm del piso y ~18° hacia abajo) el XRP recorrió la pista siguiendo la línea, <b>sin obstáculos</b>. Detecta la línea por su brillo relativo al tapete de alrededor (así no lo confunden las sombras ni los reflejos) y avanza a pulsos cortos, mirando después de cada uno. Está en la entrega como <b>3_CODIGO_PRUEBA_REAL_GRUPO_MAX</b>, en la sección <a href="#codigo">Código</a> y portado al <a href="#simuladores">simulador 3</a>.</p>
+    </div>
     <div class="dos-col">
       <figure class="figura">
         <img src="assets/robot_real.webp" alt="Robot XRP real con la Raspberry Pi encima y una webcam Logitech montada al frente, a pocos centímetros del piso, junto a un cilindro rojo" loading="lazy" width="868" height="690">
@@ -414,7 +423,8 @@
     <h2>El código del robot</h2>
     <p class="intro">Los mismos archivos que van en el robot. El programa es igual para los dos montajes de la cámara: la cámara baja
       solo agrega <span class="mono">config_local.json</span>. En la entrega están separados en
-      <b>1_CODIGO_CAMARA_ALTA (funciona)</b> y <b>2_CODIGO_CAMARA_BAJA (prueba real, con errores)</b>.</p>
+      <b>1_CODIGO_CAMARA_ALTA (funciona)</b> y <b>2_CODIGO_CAMARA_BAJA (prueba real, con errores)</b>.
+      Al final de la lista está el <b>código de la prueba real</b>, hecho en colaboración con el grupo de Max: el que funcionó en la pista, sin obstáculos y con la cámara baja (carpeta <b>3_CODIGO_PRUEBA_REAL_GRUPO_MAX</b>, sin comentarios).</p>
     <div class="visor">
       <aside class="visor-lista" id="visor-lista" aria-label="Archivos"></aside>
       <div class="visor-codigo">

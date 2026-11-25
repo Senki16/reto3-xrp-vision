@@ -28,6 +28,9 @@ const MONTAJES = {
   alta: { CAM_ALTURA_CM: C.CAM_ALTURA_CM, CAM_ADELANTE_CM: C.CAM_ADELANTE_CM, CAM_INCLINACION: C.CAM_INCLINACION,
     CAM_HFOV: C.CAM_HFOV, LINEA_ROI_SUP: C.LINEA_ROI_SUP, ROI_SUP_FRENO: C.ROI_SUP_FRENO },
   baja: { CAM_ALTURA_CM: 4.5, CAM_ADELANTE_CM: 10.5, CAM_INCLINACION: 12.0, CAM_HFOV: 45.0, LINEA_ROI_SUP: 0.40, ROI_SUP_FRENO: 0.40 },
+  // codigo de la prueba real (con el grupo de Max): webcam C270 a 3,74 cm, horizonte en -0,026 (~18,2 grados),
+  // 22,6 grados de medio campo, zona de busqueda desde 0,47 de la altura de la imagen
+  max: { CAM_ALTURA_CM: 3.74, CAM_ADELANTE_CM: 7.0, CAM_INCLINACION: 18.2, CAM_HFOV: 45.2, LINEA_ROI_SUP: 0.47, ROI_SUP_FRENO: 0.47 },
 };
 let montaje = 'alta';
 // la pagina muestra dos simuladores: el de arriba (camara alta) y, debajo, la misma pagina en un
@@ -40,6 +43,7 @@ let escenaObj = crearEscena(pista, pista.antihorario.linea);
 let robot = crearRobot();
 escenaObj.escena.add(robot);
 let sim = new Simulador(renderer, escenaObj.escena, robot, pista);
+const pilotoDe = (m) => (m === 'max' ? 'max' : 'pi');
 
 const camara = new THREE.PerspectiveCamera(45, 16 / 9, 1, 3000);
 const orbita = new OrbitControls(camara, lienzo);
@@ -303,7 +307,8 @@ function cambiarMontaje(m) {
   robot = crearRobot();
   escenaObj.escena.add(robot);
   sim.robot = robot;
-  $$('.montaje-dato').forEach((e) => { e.hidden = e.dataset.m !== m; });
+  sim.usarPiloto(pilotoDe(m));
+  $$('.montaje-dato').forEach((e) => { e.hidden = !e.dataset.m.split(' ').includes(m); });
 }
 
 function reconstruirSiCambiaSentido() {
@@ -316,6 +321,7 @@ function reconstruirSiCambiaSentido() {
   escenaObj = crearEscena(pista, pista[s].linea);
   escenaObj.escena.add(robot, rastroLinea);
   sim = new Simulador(renderer, escenaObj.escena, robot, pista);
+  sim.usarPiloto(pilotoDe(montaje));
 }
 
 $('#b-iniciar').addEventListener('click', () => {
@@ -432,6 +438,7 @@ for (const [m, archivo] of [['alta', 'data/evaluacion3d.json'], ['baja', 'data/e
 }
 
 if (params.get('montaje') === 'baja') cambiarMontaje('baja');
+if (params.get('montaje') === 'max') { cambiarMontaje('max'); $('#c-cil').value = ''; }   // la prueba real fue sin obstaculos
 reiniciar();
 requestAnimationFrame(ciclo);
 if (SOLO && window.parent !== window) {

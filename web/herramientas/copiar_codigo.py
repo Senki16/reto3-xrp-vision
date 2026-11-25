@@ -27,6 +27,16 @@ ARCHIVOS = [
     ("usb/sistema/vigia.sh", "Arranque USB", "Servicio que arranca el robot al conectar la memoria."),
     ("usb/INSTALAR_EN_LA_PI.sh", "Arranque USB", "Instalador del arranque automático."),
     ("simulador/sim.py", "Simulador", "Simulador en Python con el mismo código del robot."),
+    ("web/js/robot/max.js", "Simulador", "Port a JavaScript del código de la prueba real (simulador 3)."),
+    # el codigo que funciono en la prueba real, hecho con el grupo de Max (sin comentarios)
+    ("prueba_real_max/reto3.py", "Prueba real (con el grupo de Max)", "Programa principal: sigue la línea, esquinas, búsqueda y vuelta de marca a marca."),
+    ("prueba_real_max/follow_line.py", "Prueba real (con el grupo de Max)", "Detección de la línea: brillo relativo al tapete de alrededor."),
+    ("prueba_real_max/ahead.py", "Prueba real (con el grupo de Max)", "Mirada adelantada: hacia dónde sigue la línea."),
+    ("prueba_real_max/route.py", "Prueba real (con el grupo de Max)", "Memoria de la ruta con los comandos enviados."),
+    ("prueba_real_max/camera.py", "Prueba real (con el grupo de Max)", "Lectura de la webcam USB (o la Pi Camera)."),
+    ("prueba_real_max/xrp_serial.py", "Prueba real (con el grupo de Max)", "Enlace USB binario con el XRP (tramas de 5 bytes)."),
+    ("prueba_real_max/track_pdf.py", "Prueba real (con el grupo de Max)", "La pista del enunciado como puntos en cm."),
+    ("prueba_real_max/center.json", "Prueba real (con el grupo de Max)", "Corrección del centro de la cámara."),
 ]
 BAJA = {"CAM_ALTURA_CM": 4.5, "CAM_ADELANTE_CM": 8.0, "CAM_INCLINACION": 12.0, "CAM_HFOV": 45.0,
         "LINEA_ROI_SUP": 0.40, "ROI_SUP_FRENO": 0.40}

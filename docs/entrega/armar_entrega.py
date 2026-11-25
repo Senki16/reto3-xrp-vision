@@ -13,6 +13,7 @@ IGN = shutil.ignore_patterns("__pycache__", "*.pyc", "registros", "capturas", "s
                              "calibracion_camara.png")
 ALTA = "1_CODIGO_CAMARA_ALTA (funciona)"
 BAJA = "2_CODIGO_CAMARA_BAJA (prueba real, con errores)"
+MAX = "3_CODIGO_PRUEBA_REAL_GRUPO_MAX (funcional sin obstaculos, camara baja)"
 TEXTO = (".py", ".sh", ".txt", ".json", ".md")
 informe_docx, informe_pdf, video = sys.argv[1:4]
 
@@ -36,22 +37,25 @@ json.dump({"CAM_ALTURA_CM": 4.5, "CAM_ADELANTE_CM": 8.0, "CAM_INCLINACION": 12.0
           open(os.path.join(DEST, BAJA, "2_RASPBERRY_PI", "reto3", "config_local.json"), "w"), indent=2)
 shutil.copy2(os.path.join(AQUI, "LEEME_ALTA.txt"), os.path.join(DEST, ALTA, "LEEME.txt"))
 shutil.copy2(os.path.join(AQUI, "LEEME_BAJA.txt"), os.path.join(DEST, BAJA, "LEEME - ERRORES Y CAUSAS.txt"))
+# el codigo que funciono en la prueba real (con el grupo de Max), sin comentarios
+shutil.copytree(os.path.join(RAIZ, "prueba_real_max"), os.path.join(DEST, MAX, "reto3"), ignore=IGN)
+shutil.copy2(os.path.join(AQUI, "LEEME_MAX.txt"), os.path.join(DEST, MAX, "LEEME.txt"))
 
-shutil.copytree(os.path.join(RAIZ, "simulador"), os.path.join(DEST, "3_SIMULADOR"), ignore=IGN)
-os.makedirs(os.path.join(DEST, "3_SIMULADOR", "salidas"))
-os.makedirs(os.path.join(DEST, "4_INFORME"))
-shutil.copy2(informe_docx, os.path.join(DEST, "4_INFORME"))
-shutil.copy2(informe_pdf, os.path.join(DEST, "4_INFORME"))
-os.makedirs(os.path.join(DEST, "5_VIDEO"))
-shutil.copy2(video, os.path.join(DEST, "5_VIDEO", "Montaje Reto 3.mp4"))
-os.makedirs(os.path.join(DEST, "6_PLANOS"))
-shutil.copy2(os.path.join(RAIZ, "docs", "vista_explosionada.png"), os.path.join(DEST, "6_PLANOS", "Vista explosionada del ensamble.png"))
+shutil.copytree(os.path.join(RAIZ, "simulador"), os.path.join(DEST, "4_SIMULADOR"), ignore=IGN)
+os.makedirs(os.path.join(DEST, "4_SIMULADOR", "salidas"))
+os.makedirs(os.path.join(DEST, "5_INFORME"))
+shutil.copy2(informe_docx, os.path.join(DEST, "5_INFORME"))
+shutil.copy2(informe_pdf, os.path.join(DEST, "5_INFORME"))
+os.makedirs(os.path.join(DEST, "6_VIDEO"))
+shutil.copy2(video, os.path.join(DEST, "6_VIDEO", "Montaje Reto 3.mp4"))
+os.makedirs(os.path.join(DEST, "7_PLANOS"))
+shutil.copy2(os.path.join(RAIZ, "docs", "vista_explosionada.png"), os.path.join(DEST, "7_PLANOS", "Vista explosionada del ensamble.png"))
 if os.path.exists(os.path.join(AQUI, "montajes_camara.png")):
-    shutil.copy2(os.path.join(AQUI, "montajes_camara.png"), os.path.join(DEST, "6_PLANOS", "Montajes de la camara (alta vs baja).png"))
-shutil.copytree(os.path.join(RAIZ, "usb"), os.path.join(DEST, "7_ARRANQUE_USB"), ignore=shutil.ignore_patterns("copiar.py"))
+    shutil.copy2(os.path.join(AQUI, "montajes_camara.png"), os.path.join(DEST, "7_PLANOS", "Montajes de la camara (alta vs baja).png"))
+shutil.copytree(os.path.join(RAIZ, "usb"), os.path.join(DEST, "8_ARRANQUE_USB"), ignore=shutil.ignore_patterns("copiar.py"))
 # la marca va como plantilla: si se copia toda la entrega a una memoria no debe arrancar nada por error
-os.rename(os.path.join(DEST, "7_ARRANQUE_USB", "RETO3_AUTOARRANQUE.txt"),
-          os.path.join(DEST, "7_ARRANQUE_USB", "RETO3_AUTOARRANQUE (plantilla).txt"))
+os.rename(os.path.join(DEST, "8_ARRANQUE_USB", "RETO3_AUTOARRANQUE.txt"),
+          os.path.join(DEST, "8_ARRANQUE_USB", "RETO3_AUTOARRANQUE (plantilla).txt"))
 shutil.copy2(os.path.join(AQUI, "LEEME_ENTREGA.txt"), os.path.join(DEST, "LEEME.txt"))
 with open(os.path.join(DEST, "Pagina web - simulador 3D.url"), "w") as f:
     f.write("[InternetShortcut]\nURL=https://reto3-xrp-vision.vercel.app/\n")

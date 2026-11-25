@@ -131,5 +131,68 @@
   "grupo": "Simulador",
   "desc": "Simulador en Python con el mismo código del robot.",
   "lineas": 275
+ },
+ {
+  "ruta": "web/js/robot/max.js",
+  "archivo": "web__js__robot__max.js",
+  "grupo": "Simulador",
+  "desc": "Port a JavaScript del código de la prueba real (simulador 3).",
+  "lineas": 472
+ },
+ {
+  "ruta": "prueba_real_max/reto3.py",
+  "archivo": "prueba_real_max__reto3.py",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "Programa principal: sigue la línea, esquinas, búsqueda y vuelta de marca a marca.",
+  "lineas": 1215
+ },
+ {
+  "ruta": "prueba_real_max/follow_line.py",
+  "archivo": "prueba_real_max__follow_line.py",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "Detección de la línea: brillo relativo al tapete de alrededor.",
+  "lineas": 208
+ },
+ {
+  "ruta": "prueba_real_max/ahead.py",
+  "archivo": "prueba_real_max__ahead.py",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "Mirada adelantada: hacia dónde sigue la línea.",
+  "lineas": 216
+ },
+ {
+  "ruta": "prueba_real_max/route.py",
+  "archivo": "prueba_real_max__route.py",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "Memoria de la ruta con los comandos enviados.",
+  "lineas": 209
+ },
+ {
+  "ruta": "prueba_real_max/camera.py",
+  "archivo": "prueba_real_max__camera.py",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "Lectura de la webcam USB (o la Pi Camera).",
+  "lineas": 112
+ },
+ {
+  "ruta": "prueba_real_max/xrp_serial.py",
+  "archivo": "prueba_real_max__xrp_serial.py",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "Enlace USB binario con el XRP (tramas de 5 bytes).",
+  "lineas": 135
+ },
+ {
+  "ruta": "prueba_real_max/track_pdf.py",
+  "archivo": "prueba_real_max__track_pdf.py",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "La pista del enunciado como puntos en cm.",
+  "lineas": 37
+ },
+ {
+  "ruta": "prueba_real_max/center.json",
+  "archivo": "prueba_real_max__center.json",
+  "grupo": "Prueba real (con el grupo de Max)",
+  "desc": "Corrección del centro de la cámara.",
+  "lineas": 1
  }
 ]

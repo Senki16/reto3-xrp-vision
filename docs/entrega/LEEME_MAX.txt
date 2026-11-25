@@ -1,0 +1,61 @@
+CODIGO DE LA PRUEBA REAL - HECHO EN COLABORACION CON EL GRUPO DE MAXIMILIANO
+=============================================================================
+
+Este es el codigo que FUNCIONO en la prueba real en la pista: el XRP recorrio
+la pista siguiendo la linea, SIN OBSTACULOS, con la CAMARA BAJA (webcam USB
+Logitech C270 al frente del robot, a unos 3,7 cm del piso y mirando unos 18
+grados hacia abajo). Es el que se ve al principio del video (carpeta 6_VIDEO,
+"01 - PRUEBA FUNCIONAL").
+
+Se hizo en colaboracion con el grupo de Maximiliano: la prueba se hizo en
+conjunto, con la misma maqueta y el mismo XRP. Se le quitaron los comentarios
+y los textos de documentacion; el programa es el mismo (se comprobo que el
+arbol de sintaxis de cada archivo no cambio).
+
+Tambien esta portado a JavaScript en la pagina web, como el SIMULADOR 3 (debajo
+de los otros dos simuladores 3D): https://reto3-xrp-vision.vercel.app
+
+------------------------------------------------------------------------------
+ARCHIVOS (van todos en una carpeta de la Raspberry Pi)
+------------------------------------------------------------------------------
+  reto3.py         programa principal: sigue la linea, esquinas, busqueda y
+                   la vuelta de marca de salida a marca de salida
+  follow_line.py   deteccion de la linea (brillo relativo al tapete de
+                   alrededor, se ignoran reflejos y manchas sueltas)
+  ahead.py         mirada adelantada: hacia donde sigue la linea
+  route.py         memoria de la ruta con los comandos enviados
+  track_pdf.py     la pista del enunciado como lista de puntos (en cm)
+  camera.py        lectura de la webcam USB (o la Pi Camera con --picam)
+  xrp_serial.py    enlace USB binario con el XRP (tramas de 5 bytes)
+  center.json      correccion del centro de la camara (center_offset)
+  usevenv.py       usa la .venv de la carpeta si OpenCV no esta instalado
+  hz.py, sheet.py, plotlog.py   herramientas de revision de las grabaciones
+
+------------------------------------------------------------------------------
+COMO SE USA
+------------------------------------------------------------------------------
+  Librerias:  python3-numpy, python3-serial y OpenCV
+              (python3 -m pip install --user --break-system-packages
+               "opencv-python-headless==4.10.0.84")
+
+  python3 camera.py                 una foto de prueba de la webcam
+  python3 xrp_serial.py             prueba de las ruedas (robot levantado)
+  python3 reto3.py --look           una foto: que detecta, no se mueve
+  python3 reto3.py --lap --no-obstacles
+                                    la vuelta en la pista sin obstaculos
+  Agregar --no-view si la Pi no tiene pantalla. Ctrl+C lo detiene.
+
+------------------------------------------------------------------------------
+LADO DEL XRP
+------------------------------------------------------------------------------
+  Este codigo usa un protocolo binario propio (no el "izq,der\n" de las
+  carpetas 1 y 2):
+     Pi -> XRP:  0xFF | comando | izq | der | verificacion
+                 comando 0x10 = mover, 0x11 = saludo
+                 izq/der = 128 + potencia en porcentaje (-100..100)
+                 verificacion = 0x80 | ((comando + izq + der) & 0x3F)
+     XRP -> Pi:  0xA0 listo, 0xA1 aplicado, 0xA2 rechazado
+  Potencia maxima 0,60. El XRP se detiene solo si no llega una trama valida
+  en 0,45 s. El programa del XRP para este protocolo lo cargo el grupo de
+  Maximiliano en el robot y no venia en el paquete de codigo que nos
+  compartieron, por eso no esta en esta carpeta.

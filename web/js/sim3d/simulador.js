@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { C } from '../robot/cfg.js';
 import { percibir } from '../robot/vision.js';
 import { Piloto, ESTADOS_EVASION } from '../robot/control.js';
+import { PilotoMax } from '../robot/max.js';
 import { crearCilindro } from './escena.js';
 
 export const DT = 1 / 30;
@@ -27,6 +28,15 @@ export class Simulador {
     this.img = new Uint8ClampedArray(this.W * this.H * 4);
     this.mallasCil = [];
     this.ruido = true;
+    this.usarPiloto('pi');
+  }
+
+  // 'pi': el codigo de este equipo (carpetas 1 y 2). 'max': el de la prueba real con el grupo de Max,
+  // con su modelo de motores (zona muerta ~0,27, tope 0,59) y mas tiempo (avanza a pulsos cortos)
+  usarPiloto(tipo) {
+    this.tipo = tipo;
+    this.FabricaPiloto = tipo === 'max' ? PilotoMax : Piloto;
+    this.tMax = tipo === 'max' ? 900 : 330;
   }
 
   reiniciar({ semilla = 100, sentido = 'antihorario', cilindros = null, nCilindros = 3 } = {}) {
@@ -59,7 +69,7 @@ export class Simulador {
     this.th = Math.atan2(q[1] - p[1], q[0] - p[0]) + this.rng.normal() * 0.07;
     this.vl = this.vr = 0;
     this.g = [1 + this.rng.normal() * 0.04, 0.93 + this.rng.normal() * 0.04];
-    this.piloto = new Piloto();
+    this.piloto = new this.FabricaPiloto();
     this.piloto.arrancar(0);
     this.t = 0; this.cmd = [0, 0];
     this.iProg = null; this.avance = 0; this.desvMax = 0; this.desvSum = 0; this.desvN = 0;
@@ -96,7 +106,10 @@ export class Simulador {
   }
 
   mover(ul, ur, dt) {
-    const obj = (u, g) => (Math.abs(u) < 0.02 ? 0 : u * C.V_MAX_CM_S * g);
+    const giro = ul * ur < 0;
+    const obj = this.tipo === 'max'
+      ? (u, g) => { const m = Math.min(Math.abs(u), 0.59) - (giro ? 0.30 : 0.27); return m <= 0 ? 0 : Math.sign(u) * m * 100 * g; }
+      : (u, g) => (Math.abs(u) < 0.02 ? 0 : u * C.V_MAX_CM_S * g);
     const a = dt / (0.12 + dt);
     this.vl += a * (obj(ul, this.g[0]) * (1 + this.rng.normal() * 0.03) - this.vl);
     this.vr += a * (obj(ur, this.g[1]) * (1 + this.rng.normal() * 0.03) - this.vr);
@@ -148,7 +161,7 @@ export class Simulador {
     if (this.chocaCon()) this.choque = true;
     const B = this.pista.borde_tablero_cm;
     if (!(this.x > -B && this.x < this.pista.ancho_cm + B && this.y > -B && this.y < this.pista.largo_cm + B) || d > 45) this.salida = true;
-    if (this.choque || this.salida || e === 'FIN' || this.t > 330) this.terminado = true;
+    if (this.choque || this.salida || e === 'FIN' || this.t > this.tMax) this.terminado = true;
     this.ponerPose();
   }
 

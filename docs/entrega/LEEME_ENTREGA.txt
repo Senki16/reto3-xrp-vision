@@ -3,7 +3,7 @@ Actuadores y Sensores - Universidad EAFIT 2026-2
 David Zuluaga Henao - Alejandro Nanclares - Nicolas Zapata Jurado
 Prof. Felipe Mendoza Giraldo
 
-Pagina web (2 simuladores 3D, video):  https://reto3-xrp-vision.vercel.app
+Pagina web (3 simuladores 3D, video):  https://reto3-xrp-vision.vercel.app
 Codigo en GitHub:                       https://github.com/Senki16/reto3-xrp-vision
 
 ==============================================================================
@@ -22,19 +22,28 @@ CONTENIDO
       camara el robot sigue la linea en rectas y curvas suaves pero se sale en
       las esquinas cerradas. Ver "LEEME - ERRORES Y CAUSAS.txt".
 
- 3_SIMULADOR/        simulador en Python (solo computador)
- 4_INFORME/          informe en Word y PDF
- 5_VIDEO/            montaje de la prueba real (2 min 34 s; empieza con la prueba
+ 3_CODIGO_PRUEBA_REAL_GRUPO_MAX (funcional sin obstaculos, camara baja)/
+      El codigo que FUNCIONO en la prueba real, hecho en colaboracion con el
+      grupo de Maximiliano (misma maqueta y mismo XRP). Con la webcam baja
+      (~3,7 cm del piso, ~18 grados hacia abajo) el robot recorrio la pista
+      siguiendo la linea, sin obstaculos. Sin comentarios. Ver LEEME.txt.
+      En la pagina web esta portado como el SIMULADOR 3.
+
+ 4_SIMULADOR/        simulador en Python (solo computador)
+ 5_INFORME/          informe en Word y PDF
+ 6_VIDEO/            montaje de la prueba real (2 min 34 s; empieza con la prueba
                      funcional hecha con el equipo de Maximiliano)
- 6_PLANOS/           vista explosionada del ensamble y montajes de la camara
- 7_ARRANQUE_USB/     opcional: el robot arranca solo al conectar una memoria USB
+ 7_PLANOS/           vista explosionada del ensamble y montajes de la camara
+ 8_ARRANQUE_USB/     opcional: el robot arranca solo al conectar una memoria USB
                      (para usarlo: en una memoria, junto a estos archivos, copiar
                      1_XRP y 2_RASPBERRY_PI de la carpeta 1 y quitar "(plantilla)"
                      del nombre de RETO3_AUTOARRANQUE; ver LEEME_PRIMERO.txt)
 
 Diferencia entre 1 y 2: el codigo es identico; la carpeta 2 trae ademas
 2_RASPBERRY_PI/reto3/config_local.json con la geometria de la webcam baja.
-La posicion de la camara fue lo que decidio el resultado.
+La carpeta 3 es otro programa (el del grupo de Maximiliano), con su propio
+protocolo con el XRP; es el que completo el recorrido en la pista real.
+El "Como se usa" y el protocolo de abajo son de las carpetas 1 y 2.
 
 ==============================================================================
 COMO SE USA (resumen; detalle en el LEEME de cada carpeta y en el informe)

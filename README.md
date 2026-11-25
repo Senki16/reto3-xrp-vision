@@ -15,8 +15,12 @@ Cámara ──imagen──▶ Raspberry Pi (visión + decisión) ──"izq,der\
 
 > **La cámara debe ir alta.** En la prueba real el robot se armó con una webcam USB al frente, a ~4,5 cm del piso, y así
 > pierde la línea en las curvas cerradas. Con el mismo programa, la cámara alta (17 cm, 52° hacia abajo) completa 6/6 vueltas
-> sin obstáculos y 10/12 con cilindros en simulación; la cámara baja, 0/6 y 0/12. La página tiene los **dos simuladores 3D**,
-> uno debajo del otro, para comparar los montajes.
+> sin obstáculos y 10/12 con cilindros en simulación; la cámara baja, 0/6 y 0/12. La página tiene **tres simuladores 3D**,
+> uno debajo del otro: los dos montajes con nuestro código y, al final, el código de la prueba real.
+>
+> **Código de la prueba real:** [`prueba_real_max/`](prueba_real_max), hecho en colaboración con el grupo de Max. Es el que
+> funcionó en la pista real: sin obstáculos y con la cámara baja (webcam C270 a ~3,7 cm, ~18° hacia abajo) recorrió la pista
+> siguiendo la línea. Va sin comentarios; está portado a JavaScript en [`web/js/robot/max.js`](web/js/robot/max.js) (simulador 3).
 
 **Qué va en cada placa:** en el **XRP** solo [`xrp/main.py`](xrp/main.py) (guardado como `main.py` en su raíz);
 en la **Raspberry Pi** toda la carpeta [`raspberry/`](raspberry) (se ejecuta `python3 reto3.py`).
@@ -51,6 +55,7 @@ Los parámetros y la pista se exportan desde Python con `python web/herramientas
 | [`raspberry/prueba_serial.py`](raspberry/prueba_serial.py) | Prueba del enlace y calibración de motores (velocidad, giro, esfuerzo mínimo). |
 | [`raspberry/herramientas/`](raspberry/herramientas) | `capturar.py` (fotos), `calibrar.py` (colores/umbral con barras), `medir_camara.py` (homografía con una hoja carta). |
 | [`simulador/sim.py`](simulador/sim.py) | Simulador: dibuja lo que vería la cámara (piso, línea, cilindros 3D) sobre la pista del Reto 1 y corre el código de `raspberry/`. |
+| [`prueba_real_max/`](prueba_real_max) | Código de la prueba real, hecho con el grupo de Max (funcional sin obstáculos, cámara baja). Protocolo binario propio con el XRP. |
 
 ## Protocolo serial (Pi ↔ XRP)
 

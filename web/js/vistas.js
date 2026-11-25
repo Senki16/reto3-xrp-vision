@@ -3,8 +3,7 @@
 (function () {
   const solo = new URLSearchParams(location.search).get('solo') === '1';
   if (solo) {                      // marco del simulador 2: solo el simulador, sin anidar otro marco
-    const m = document.getElementById('marco-baja');
-    if (m) m.remove();
+    document.querySelectorAll('.sim-marco').forEach((m) => m.remove());
     return;
   }
 
@@ -37,7 +36,7 @@
 
   // ------------------------------------------------------------ visor de codigo
   let listo = false;
-  const LENGUAJE = { py: 'python', sh: 'bash', json: 'json' };
+  const LENGUAJE = { py: 'python', sh: 'bash', json: 'json', js: 'javascript' };
 
   function cargarHljs() {
     return new Promise((ok) => {
