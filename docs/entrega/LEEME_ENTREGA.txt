@@ -24,7 +24,8 @@ CONTENIDO
 
  3_SIMULADOR/        simulador en Python (solo computador)
  4_INFORME/          informe en Word y PDF
- 5_VIDEO/            montaje de la prueba real (1 min 16 s)
+ 5_VIDEO/            montaje de la prueba real (2 min 34 s; empieza con la prueba
+                     funcional hecha con el equipo de Maximiliano)
  6_PLANOS/           vista explosionada del ensamble y montajes de la camara
  7_ARRANQUE_USB/     opcional: el robot arranca solo al conectar una memoria USB
                      (para usarlo: en una memoria, junto a estos archivos, copiar

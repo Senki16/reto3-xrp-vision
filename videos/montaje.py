@@ -29,8 +29,14 @@ F_GRANDE = ImageFont.truetype(FUENTES + "arialbd.ttf", 54)
 EQUIPO = "David Zuluaga Henao · Alejandro Nanclares · Nicolás Zapata Jurado"
 
 # (tipo, archivo, inicio, fin, velocidad, etiqueta, titulo, texto)
+# La prueba funcional esta en el escritorio (fuera de la carpeta de videos): ruta absoluta.
+FUNCIONAL = os.path.join(os.path.expanduser("~"), "OneDrive", "Escritorio", "PRUEBA FUNCIONAL XRP 3.mp4")
+
 GUION = [
     ("titulo",),
+    ("video", FUNCIONAL, 0, 312.2, 4, "01 · PRUEBA FUNCIONAL", "Recorre la pista",
+     "El robot sigue la línea negra por toda la pista usando solo la cámara. Prueba hecha en conjunto con el "
+     "equipo de Maximiliano: usamos la misma maqueta y el mismo XRP.  Video ×4"),
     ("foto", "12.jpeg", 0, 3.2, 1, "01 · EL ROBOT", "XRP + Raspberry Pi 5",
      "La Raspberry Pi va sobre el XRP. La única entrada es una webcam Logitech montada al frente, a unos 4,5 cm del piso."),
     ("foto", "10.jpeg", 0, 3.2, 1, "02 · SOLO LA CÁMARA", "Visión artificial",
@@ -65,6 +71,23 @@ GUION = [
      "Después de salirse hay que volver a ponerlo sobre la línea a mano. Por esto la cámara debe ir alta.  Video ×1,5"),
     ("cierre",),
 ]
+
+
+def numerar(guion):
+    """Renumera las etiquetas «NN · TEXTO» en orden; pasos seguidos con la misma etiqueta comparten numero."""
+    out, n, previa = [], 0, None
+    for paso in guion:
+        if paso[0] in ("titulo", "cierre"):
+            out.append(paso)
+            continue
+        texto = paso[5].split("·", 1)[-1].strip()
+        if texto != previa:
+            n, previa = n + 1, texto
+        out.append(paso[:5] + ("%02d · %s" % (n, texto),) + paso[6:])
+    return out
+
+
+GUION = numerar(GUION)
 
 
 def envolver(d, texto, fuente, ancho):
@@ -150,10 +173,10 @@ def main():
                     d.rectangle((90, 190, 98, 560), fill=NAR)
                     d.text((126, 188), "CONCLUSIÓN", font=F_MONO, fill=NAR)
                     y = 222
-                    for ln in ["Con la cámara baja el robot sigue la línea", "en rectas y curvas suaves."]:
+                    for ln in ["El robot recorrió la pista siguiendo", "la línea solo con la cámara."]:
                         d.text((124, y), ln, font=F_TIT, fill=(240, 243, 247)); y += 54
                     y += 18
-                    for ln in envolver(d, "Para las curvas cerradas y la evasión de los cilindros la cámara debe ir alta "
+                    for ln in envolver(d, "Para que sea confiable en las curvas cerradas y en la evasión de los cilindros, la cámara debe ir alta "
                                           "(12–17 cm) e inclinada hacia abajo (45–52°): así ve el piso desde justo delante "
                                           "del robot. Con ese montaje el mismo programa completó 6 de 6 vueltas sin "
                                           "obstáculos y 10 de 12 con cilindros en simulación.", F_SUB, 1000):
